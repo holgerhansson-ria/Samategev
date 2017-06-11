@@ -67,7 +67,7 @@ app.get('/OAuthCallback', (req, res) => {
       Vt. https://developer.github.com/v3/users/#get-the-authenticated-user */
     const GithubAPIURL = 'https://api.github.com/';
     var options = {
-      url: GithubAPIURL,
+      url: GithubAPIURL + 'user',
       headers: {
         'User-Agent': 'Samatekst',
         'Authorization': 'token ' + token.access_token
