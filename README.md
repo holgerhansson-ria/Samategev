@@ -1,8 +1,16 @@
-# node-js-getting-started
+# Samategev
+
+Node.js-Heroku-OAuth-Github näiterakendus
+
+`Samategev` on Herokus majutatud Node.js rakendus, mis demonstreerib OAuth 2.0 autentimist ja GitHubi kasutamist rakenduse püsimäluna.
+
+Aluseks on Heroku näide: [https://github.com/heroku/node-js-getting-started](https://github.com/heroku/node-js-getting-started), kirjeldatud: [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
+
+----
+
+## node-js-getting-started
 
 A barebones Node.js app using [Express 4](http://expressjs.com/).
-
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
 
 ## Running Locally
 

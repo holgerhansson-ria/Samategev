@@ -1,27 +1,216 @@
-.jumbotron {
-  background: #532F8C;
-  color: white;
-  padding-bottom: 80px; }
-  .jumbotron .btn-primary {
-    background: #845ac7;
-    border-color: #845ac7; }
-    .jumbotron .btn-primary:hover {
-      background: #7646c1; }
-  .jumbotron p {
-    color: #d9ccee;
-    max-width: 75%;
-    margin: 1em auto 2em; }
-  .navbar + .jumbotron {
-    margin-top: -20px; }
-  .jumbotron .lang-logo {
+/* 
+
+Teave
+-----
+* Flexbox: vt https://v4-alpha.getbootstrap.com/utilities/flexbox/#align-content
+* Vormid: vt https://v4-alpha.getbootstrap.com/components/forms/
+
+Värviskeem
+----------
+* DarkBlue
+            - keskelemendi rõhutus
+* #757575 (keskmiselt hall)
+            - võimaldatud nupp, tooltip 
+* Gainsboro (helehall)
+            - mittevõimalik nupp 
+* #464a4c (tumehall)
+            - sisestatav tekst 
+* Azure (pastellroheline)
+            - informatsioonilise paani (Infopaan, Kool) taust
+* Aqua (ereroheline)
+            - informatsioonilise paani ääris
+* Coral
+            - veateatepaani ääris,
+              veateate tekst
+* Lavenderblush
+            - veateatepaani taust
+* Gray
+            - paani sulgur
+* #C5E1A5 (nõrk roheline)
+            - normaaltoimingu nupp (Salvesta)
+            - dialoogikasti ääris, märgendi ääris
+* #F48FB1 (punane)
+            - tühistava toimingu nupp 
+* 292B2C (Bootstrap4 vaikimisi tekstivärv)
+  - DarkBlue - allpunktiir
+            - link
+
+(värvimääranguid on ka HTML-is)
+
+*/
+
+  /* Üldine font ja fondisuurus */
+  body, textarea, button, input, legend {  
+    font-family: 'Times New Roman', serif !important;
+    font-size: 14pt !important;
+  }
+
+  /* Keha */
+  body { padding: 2rem 2rem 8rem 2rem; }
+
+  /* Mitmesugused korduvkasutatavad stiilid */
+  .tooltip-inner { background-color: White;
+    color: #757575; }
+
+  /* Tekstisisestusala
+    Content-editable div, kujundus imiteeritud Bootstrap input elemendi järele */
+  #Tekst { 
     display: block;
-    background: #B01302;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    border: 2px solid white; }
-    .jumbotron .lang-logo img {
-      max-width: 100%; }
+    width: 100%;
+    height: auto; /* 2.5rem; */
+    padding: 0.5rem 0.75rem;
+    line-height: 1.25;
+    color: #464a4c;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    margin-bottom: 1rem; }
+  #Tekst:focus {
+    border-color: LightGray;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055) inset, 0 0 8px rgba(220, 180, 220, 0.6);
+    outline: 0 none;
+  }
+
+  .kesk { color: DarkBlue;
+    font-weight: 600; }
+  .ikoon { font-family: 'Material Icons';
+    font-size: 48px;
+  }
+  /* Tekstitöötluse nupud */
+  #Tekstitootlus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  /* Paanid - Ühised omadused
+     ------------------------ 
+    Paanid on: 1) Infopaan; 2) Teatepaan; 3) Koolitekst; 4) Salvestusdialoog; 5) Oigekirjadialoog; 6) Filtridialoog. 
+  */
+  .paan {
+    border-radius: 4px; 
+    padding: 0 0 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem; 
+  }
+  .peidetud { 
+    /* display: flex; ülekirjutamiseks */
+    display: none !important;
+  }
+  .sulgemisnupuke {
+    /* Sulgemisnupuke */
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-size: 16pt;
+    font-weight: bold;
+    color: Gray;
+  }
+  .dialoog {
+    /* Avatav/suletav dialoogivorm */
+    border: 1px solid #C5E1A5;
+  }
+  .teabepaan {
+    /* Teavet esitav paan */
+    border: 1px solid Aqua;
+    background-color: Azure;
+  }
+
+  /* Paanid - spetsiifilised omadused
+     --------------------------------
+  */
+  #Teatepaan { 
+    border: 1px solid coral;
+    background-color: lavenderblush;
+    padding: 1rem;
+    color: coral;
+  }
+
+  /* Nupud */
+  .nupp { margin: 1rem 0.5rem;
+    cursor: pointer;
+    color: #757575;
+  }
+  .disabled { color: Gainsboro !important; cursor: auto; }
+
+  /* Paanide spetsiifilised elemendid */
+    
+  #Infotekst, #KoolitekstSisemine {
+    margin: 1rem;
+  }   
+  .klahv {
+    border-radius: 3px;
+    padding-left: 1px; padding-right: 1px;
+    border: 1px solid #757575;
+    font-family: 'Courier New', monospace;
+  }
+
+  /* Tekstikogu */
+  .kirje { 
+    text-indent: -3rem;
+    padding-left: 3rem;
+    margin: 0;
+  }
+  .margend { 
+    border: 1px dotted Aqua;
+    border-radius: 2px;
+    padding: 2px;
+    font-family: 'Courier New', monospace;
+    font-size: 10pt;
+    text-transform: uppercase;
+    margin-left: 1rem; }
+  
+  /* Sirvimisnupud */
+  #Sirvimine {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  #PageNo { 
+    margin-left: 1rem; margin-right: 1rem;
+  }
+  #PageNo:after {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+
+  /* Filter */
+  #Filtritekst { margin: 1rem;
+    width: 8rem;
+    color: #757575 !important; }
+  #Filtritekst:focus {
+    border-color: #C5E1A5 !important;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055) inset, 0 0 8px rgba(220, 180, 220, 0.6);
+    outline: 0 none;      
+  }
+
+  /* Õigekirjakontrolli dialoog */
+  #KontrTekstiblokk {
+    margin: 1rem;
+  }
+  #KontrollitavTekst { 
+    width: 24rem;
+  }
+
+  /* SamatekstidTekstist dialoog */
+  #SamatekstidTekstistBlokk1 {
+    margin: 1rem;
+  }
+  #SamatekstidTekstistTekst {
+    width: 24rem;
+  }
+  #SamatekstidTekstistTulemus {
+    margin: 1rem;
+  }
+
+  /* Määra üle Bootstrapi lingivärv */
+  a, a:hover, a:active, a:visited {
+    color: 292B2C !important;
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: DarkBlue;
+  }
 
