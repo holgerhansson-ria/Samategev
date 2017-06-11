@@ -16,7 +16,7 @@ app.set('view engine', 'ejs');
 const oauth2 = simpleOauthModule.create({
   client: {
     id: 'ab5b4f1671a58e7ba35a',
-    secret: 'd276beb0af7d09ad1a2d5a74df280029dd9d2dbd',
+    secret: process.env.SECRET,
   },
   auth: {
     tokenHost: 'https://github.com',
@@ -69,6 +69,7 @@ app.get('/OAuthCallback', (req, res) => {
     var options = {
       url: GithubAPIURL,
       headers: {
+        'User-Agent': 'Samatekst',
         'Authorization': 'token ' + token.access_token
       }
     };
