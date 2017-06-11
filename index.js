@@ -2,6 +2,8 @@
 
 const express = require('express');
 const simpleOauthModule = require('simple-oauth2');
+const uid = require('rand-token').uid;
+const requestModule = require('request');
 
 // Veebiserveri ettevalmistamine
 const app = express();
@@ -23,20 +25,25 @@ const oauth2 = simpleOauthModule.create({
   },
 });
 
+// Generate a 16 character alpha-numeric token:
+var token = uid(16);
+
+/* Pärime skoobid 'user' ja 'public_repo'. Vt https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-scopes-for-oauth-apps/ */
+
 // Authorization uri definition
 const authorizationUri = oauth2.authorizationCode.authorizeURL({
   redirect_uri: 'https://samategev.herokuapp.com/OAuthCallback',
-  scope: 'notifications',
-  state: '3(#0/!~',
+  scope: 'user public_repo',
+  state: token,
 });
 
-// Initial page redirecting to Github
+// Suunamine rakendusele õigust andma (Githubis)
 app.get('/auth', (req, res) => {
   console.log(authorizationUri);
   res.redirect(authorizationUri);
 });
 
-// Callback service parsing the authorization token and asking for the access token
+// Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib juurdepääsutõendi
 app.get('/OAuthCallback', (req, res) => {
   const code = req.query.code;
   const options = {
@@ -52,9 +59,38 @@ app.get('/OAuthCallback', (req, res) => {
     console.log('The resulting token: ', result);
     const token = oauth2.accessToken.create(result);
 
-    return res
+    // Juurdepääsutõendi saatmine küpsisesse panekuks - ettevalmistus
+    res.cookie('GHtoend', JSON.stringify(token));
+
+    /* Tuleks tagastada kasutaja nimi
+       Kõigepealt pärida kasutaja nime Github-st
+      Vt. https://developer.github.com/v3/users/#get-the-authenticated-user */
+    const GithubAPIURL = 'https://api.github.com/';
+    var options = {
+      url: GithubAPIURL,
+      headers: {
+        'Authorization': 'token ' + token.access_token
+      }
+    };
+    requestModule(
+      options,
+      function (error, response, body) {
+        if (error) {
+          console.log('Viga kasutaja andmete pärimisel Github-st: ', error);  
+        }
+        if (response) {
+          console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);  
+        }
+        console.log('body: ', body);  
+    });
+
+    res.status(200)
+      .render('pages/autenditud', { token: token });
+
+    // Saadab päringuvastuses juurdepääsutõendi, kuvamiseks   
+    /* return res
       .status(200)
-      .json(token);
+      .json(token); */
   });
 });
 
@@ -64,13 +100,13 @@ app.get('/success', (req, res) => {
 });
 
 // Esilehe kuvamine
-app.get('/', function(request, response) {
+app.get('/', function (request, response) {
   response.render('pages/index');
 });
 
 // Veebiserveri käivitamine
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));
 });
 

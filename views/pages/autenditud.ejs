@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../partials/header.ejs %>
+</head>
+
+<body>
+
+  <div class='container-fluid'>
+    <div class='row'>
+      <div class='col-xs-12 col-sm-10 col-md-8 col-lg-8 col-xl-6'>
+
+        <!-- Infopaan -->
+        <div id='Infopaan'
+          class='paan teabepaan d-flex align-items-start'>
+          <!-- Info -->
+          <p id='Infotekst'>
+            <b>Node.js-Heroku-OAuth-Github näiterakendus</b><br>
+            <br>
+            Samategev on <a href='https://www.heroku.com'>Herokus</a> majutatud <a href='https://nodejs.org'>Node.js</a> rakendus, mis demonstreerib <a href='https://oauth.net/2/'>OAuth 2.0</a> autentimist ja <a href='https://github.com/'>GitHubi</a> kasutamist rakenduse püsimäluna.
+          </p>
+          <!-- Sulgemisnupp -->
+          <div id='InfopaanSulge' class='justify-content-end sulgemisnupuke'>
+            <span>&times;</span>
+          </div>
+        </div>
+
+        <!-- Autentimispaan -->
+        <div id='Autentimispaan' class='paan d-flex align-items-start'>
+          <p>Sisse logitud Githubi kasutajana.</p>
+          <p><a href="/logout">Logi välja</a></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <% include ../partials/jalus.ejs %>
+
+</body>
+</html>

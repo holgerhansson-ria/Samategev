@@ -12,6 +12,8 @@
   "dependencies": {
     "ejs": "2.4.1",
     "express": "4.13.3",
+    "rand-token": "^0.3.0",
+    "request": "^2.81.0",
     "simple-oauth2": "^1.2.0"
   },
   "repository": {
