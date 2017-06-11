@@ -86,10 +86,11 @@ app.get('/OAuthCallback', (req, res) => {
         if (response) {
           console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);  
         }
-        console.log('body: ', body);  
-        console.log('kasutaja: ', body.login);
+        console.log('body: ', body);
+        var saadudAndmed = JSON.parse(body);
+        console.log('kasutaja: ', saadudAndmed.login);
         res.status(200)
-          .render('pages/autenditud', { kasutaja: body.login });
+          .render('pages/autenditud', { kasutaja: saadudAndmed.login });
     });
 
 
