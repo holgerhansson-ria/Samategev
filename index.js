@@ -65,6 +65,7 @@ app.get('/OAuthCallback', (req, res) => {
     /* Tuleks tagastada kasutaja nimi
        Kõigepealt pärida kasutaja nime Github-st
       Vt. https://developer.github.com/v3/users/#get-the-authenticated-user */
+    console.log('==Juurdepääsutõend: ' + token.access_token);
     const GithubAPIURL = 'https://api.github.com/';
     var options = {
       url: GithubAPIURL + 'user',
