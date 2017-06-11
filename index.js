@@ -57,6 +57,7 @@ app.get('/OAuthCallback', (req, res) => {
     }
 
     console.log('The resulting token: ', result);
+    // Selgitada, milleks järgnev kasulik on
     const token = oauth2.accessToken.create(result);
 
     // Juurdepääsutõendi saatmine küpsisesse panekuks - ettevalmistus
@@ -64,14 +65,16 @@ app.get('/OAuthCallback', (req, res) => {
 
     /* Tuleks tagastada kasutaja nimi
        Kõigepealt pärida kasutaja nime Github-st
-      Vt. https://developer.github.com/v3/users/#get-the-authenticated-user */
-    console.log('==Juurdepääsutõend: ' + token.access_token);
+      Vt. https://developer.github.com/v3/users/#get-the-authenticated-user
+      
+    */
+    console.log('==Juurdepääsutõend: ' + result.access_token);
     const GithubAPIURL = 'https://api.github.com/';
     var options = {
       url: GithubAPIURL + 'user',
       headers: {
         'User-Agent': 'Samatekst',
-        'Authorization': 'token ' + token.access_token
+        'Authorization': 'token ' + result.access_token
       }
     };
     requestModule(
@@ -84,10 +87,11 @@ app.get('/OAuthCallback', (req, res) => {
           console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);  
         }
         console.log('body: ', body);  
+        console.log('kasutaja: ', body.login);
+        res.status(200)
+          .render('pages/autenditud', { kasutaja: body.login });
     });
 
-    res.status(200)
-      .render('pages/autenditud', { token: token });
 
     // Saadab päringuvastuses juurdepääsutõendi, kuvamiseks   
     /* return res
