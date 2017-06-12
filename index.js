@@ -87,7 +87,7 @@ app.get('/autenditud', (req, res) => {
   /* Juurdepääsutõendi väljavõtmine päringuga saadetud küpsisest */
   const GHtoend = req.cookies.GHtoend;
   console.log('GHtoend: ' + GHtoend);
-  const access_token = JSON.parse(GHtoend).access_token;
+  const access_token = JSON.parse(GHtoend).token.access_token;
   console.log('Ekstraheeritud juurdepääsutõend: ' + access_token);
   /* Pärime kasutaja nime Github-st Vt. https://developer.github.com/v3/users/#get-the-authenticated-user
   */
