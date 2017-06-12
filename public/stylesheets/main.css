@@ -105,6 +105,7 @@ Värviskeem
     color: #757575;
   }
   .disabled { color: Gainsboro !important; cursor: auto; }
+  .servataNupp { border: none; }
 
   /* Paanide spetsiifilised elemendid */
     
