@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <% include ../partials/header.ejs %>
 </head>
@@ -11,13 +12,12 @@
       <div class='col-xs-12 col-sm-10 col-md-8 col-lg-8 col-xl-6'>
 
         <!-- Infopaan -->
-        <div id='Infopaan'
-          class='paan teabepaan d-flex align-items-start'>
+        <div id='Infopaan' class='paan teabepaan d-flex align-items-start'>
           <!-- Info -->
           <p id='Infotekst'>
             <b>Node.js-Heroku-OAuth-Github näiterakendus</b><br>
-            <br>
-            Samategev on <a href='https://www.heroku.com'>Herokus</a> majutatud <a href='https://nodejs.org'>Node.js</a> rakendus, mis demonstreerib <a href='https://oauth.net/2/'>OAuth 2.0</a> autentimist ja <a href='https://github.com/'>GitHubi</a> kasutamist rakenduse püsimäluna.
+            <br> Samategev on <a href='https://www.heroku.com'>Herokus</a> majutatud <a href='https://nodejs.org'>Node.js</a>            rakendus, mis demonstreerib <a href='https://oauth.net/2/'>OAuth 2.0</a> autentimist ja
+            <a href='https://github.com/'>GitHubi</a> kasutamist rakenduse püsimäluna.
           </p>
           <!-- Sulgemisnupp -->
           <div id='InfopaanSulge' class='justify-content-end sulgemisnupuke'>
@@ -34,27 +34,30 @@
         <!-- Tekstikoostepaan -->
         <div id='Tekstikoostepaan' class='paan d-flex align-items-start justify-items-center'>
           <form action="/salvesta" method="post">
-            <div class="input-group">
-              <input
-                type="text"
-                id='SalvestatavTekst'
-                name='salvestatavtekst'
-                class="form-control"
-                autocomplete='off'
-                placeholder="Salvestatav sõnum...">
-              <span class="input-group-btn">
-                <button class="btn btn-secondary" type="submit">Salvesta!</button>
-              </span>
+            <div class="form-group">
+              <label for="FailiNimi">Faili nimi:</label>
+              <input type='text' class="form-control" id="FailiNimi" name='failinimi' autocomplete='off'>
+              </textarea>
             </div>
+            <div class="form-group">
+              <label for="SalvestatavTekst">Salvestatav tekst:</label>
+              <textarea class="form-control" id="SalvestatavTekst" name='salvestatavtekst' autocomplete='off' rows="3">
+              </textarea>
+            </div>
+            <button class="btn btn-secondary" type="submit">
+              Salvesta!
+            </button>
           </form>
         </div>
-
       </div>
+
     </div>
-
-    <% include ../partials/jalus.ejs %>
-
   </div>
 
+  <% include ../partials/jalus.ejs %>
+
+    </div>
+
 </body>
+
 </html>

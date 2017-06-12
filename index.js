@@ -9,16 +9,6 @@
 /* 0 Abifunktsioonid
    ------------------------------------------
 */
-function b64EncodeUnicode(str) {
-    // Vt https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa 
-    // first we use encodeURIComponent to get percent-encoded UTF-8,
-    // then we convert the percent encodings into raw bytes which
-    // can be fed into btoa.
-    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
-        function toSolidBytes(match, p1) {
-            return String.fromCharCode('0x' + p1);
-    }));
-}
 
 /* 1 Sõltuvuste importimine
    ------------------------------------------
@@ -137,11 +127,15 @@ app.get('/autenditud', (req, res) => {
 
 app.post('/salvesta', (req, res) => {
   console.log(req.body);
+  var fNimi = req.body.failinimi;
   var sTekst = req.body.salvestatavtekst;
   const access_token = accessTokenFromCookies(req);
   /* Salvestame teksti Githubi. Vt https://developer.github.com/v3/repos/contents/#create-a-file 
   PUT /repos/:owner/:repo/contents/:path
   */
+
+  var buffer = new Buffer(sTekst);
+  var toBase64 = buffer.toString('base64');
 
   var sisu = {
       message: 'Testimine',
@@ -149,13 +143,13 @@ app.post('/salvesta', (req, res) => {
         name: "Priit Parmakson",
         email: "priit.parmakson@gmail.com"
       },
-      content: b64EncodeUnicode(sTekst)
+      content: toBase64
     };
 
   const GithubAPIURL = 'https://api.github.com/';
   var options = {
     method: 'PUT',
-    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/Tekst' + uid(6) + '.md',
+    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/' + failinimi,
     headers: {
       'User-Agent': 'Samatekst',
       'Authorization': 'token ' + access_token
