@@ -149,7 +149,7 @@ app.post('/salvesta', (req, res) => {
   const GithubAPIURL = 'https://api.github.com/';
   var options = {
     method: 'PUT',
-    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/' + failinimi,
+    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/' + fNimi,
     headers: {
       'User-Agent': 'Samatekst',
       'Authorization': 'token ' + access_token

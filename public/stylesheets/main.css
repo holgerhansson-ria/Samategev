@@ -139,8 +139,7 @@ Värviskeem
   #STekstiblokk {
     margin: 1rem;
   }
-  #SalvestatavTekst {  margin: 1rem;
-    width: 24rem;
+  #SalvestatavTekst {  
     color: #757575 !important;
   }
   #SalvestatavTekst:focus {
