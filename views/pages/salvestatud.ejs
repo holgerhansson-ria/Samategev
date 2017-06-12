@@ -31,24 +31,11 @@
           <p><a href="/logout">Logi välja</a></p>
         </div>
 
-        <!-- Tekstikoostepaan -->
-        <div id='Tekstikoostepaan' class='paan d-flex align-items-start justify-items-center'>
-          <form action="/salvesta" method="post">
-            <div class="form-group">
-              <label for="FailiNimi">Faili nimi:</label>
-              <input type='text' class="form-control" id="FailiNimi" name='failinimi' autocomplete='off'>
-              </textarea>
-            </div>
-            <div class="form-group">
-              <label for="SalvestatavTekst">Salvestatav tekst:</label>
-              <textarea class="form-control" id="SalvestatavTekst" name='salvestatavtekst' autocomplete='off' rows="3">
-              </textarea>
-            </div>
-            <button class="btn btn-secondary" type="submit">
-              <i class="ikoon material-icons">cloud_upload</i>
-            </button>
-          </form>
+        <!-- Teatepaan -->
+        <div id='Teatepaan' class='paan'>
+          <p><%= vastus %></p>
         </div>
+        
       </div>
 
     </div>

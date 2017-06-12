@@ -52,35 +52,8 @@ Värviskeem
   .tooltip-inner { background-color: White;
     color: #757575; }
 
-  /* Tekstisisestusala
-    Content-editable div, kujundus imiteeritud Bootstrap input elemendi järele */
-  #Tekst { 
-    display: block;
-    width: 100%;
-    height: auto; /* 2.5rem; */
-    padding: 0.5rem 0.75rem;
-    line-height: 1.25;
-    color: #464a4c;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 4px;
-    margin-bottom: 1rem; }
-  #Tekst:focus {
-    border-color: LightGray;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055) inset, 0 0 8px rgba(220, 180, 220, 0.6);
-    outline: 0 none;
-  }
-
-  .kesk { color: DarkBlue;
-    font-weight: 600; }
   .ikoon { font-family: 'Material Icons';
     font-size: 48px;
-  }
-  /* Tekstitöötluse nupud */
-  #Tekstitootlus {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1rem;
   }
 
   /* Paanid - Ühised omadused

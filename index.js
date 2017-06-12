@@ -105,7 +105,7 @@ app.get('/autenditud', (req, res) => {
   var options = {
     url: GithubAPIURL + 'user',
     headers: {
-      'User-Agent': 'Samatekst',
+      'User-Agent': 'Samategev',
       'Authorization': 'token ' + access_token
     }
   };
@@ -149,9 +149,9 @@ app.post('/salvesta', (req, res) => {
   const GithubAPIURL = 'https://api.github.com/';
   var options = {
     method: 'PUT',
-    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/' + fNimi,
+    url: GithubAPIURL + 'repos/PriitParmakson/Samategev/contents/' + fNimi,
     headers: {
-      'User-Agent': 'Samatekst',
+      'User-Agent': 'Samategev',
       'Authorization': 'token ' + access_token
     },
     json: true,
@@ -160,16 +160,22 @@ app.post('/salvesta', (req, res) => {
   requestModule(
     options,
     function (error, response, body) {
+      var vastus;
       if (error) {
-        console.log('Viga kasutaja andmete pärimisel Github-st: ', error);
+        vastus = 'Viga faili salvestamisel Github-i: ' + error;
+        console.log('Viga faili salvestamisel Github-i: ', error);
       }
       if (response) {
-        console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);
+        console.log('Faili salvestamine Github-i - statusCode: ', response.statusCode);
+        if (response.statusCode == 201) {
+          vastus = 'Salvestatud';
+        }
+        else {
+          vastus = 'Salvestamine ebaõnnestus. Kood: ' + response.statusCode;
+        }
       }
-      var saadudAndmed = JSON.parse(body);
-      console.log('kasutaja: ', saadudAndmed.login);
       res.status(200)
-        .render('pages/autenditud', { kasutaja: saadudAndmed.login });
+        .render('pages/salvestatud', { vastus: vastus });
     });
 })
 
