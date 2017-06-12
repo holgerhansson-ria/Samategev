@@ -32,7 +32,7 @@
         </div>
 
         <!-- Tekstikoostepaan -->
-        <div id='Tekstikoostepaan' class='paan d-flex align-items-start justify-items-center'>
+        <div id='Tekstikoostepaan' class='paan d-flex'>
           <form action="/salvesta" method="post">
             <div class="form-group">
               <label for="FailiNimi">Faili nimi:</label>
@@ -44,9 +44,11 @@
               <textarea class="form-control" id="SalvestatavTekst" name='salvestatavtekst' autocomplete='off' rows="3">
               </textarea>
             </div>
-            <button class="btn btn-secondary" type="submit">
-              <i class="ikoon material-icons">cloud_upload</i>
-            </button>
+            <p>
+              <span class="btn btn-secondary" type="submit">
+               <i class="ikoon material-icons">cloud_upload</i>
+              </span>
+            </p>
           </form>
         </div>
       </div>
