@@ -25,7 +25,8 @@ function b64EncodeUnicode(str) {
 */
 
 const express = require('express');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const simpleOauthModule = require('simple-oauth2');
 const uid = require('rand-token').uid;
 const requestModule = require('request');
@@ -41,6 +42,9 @@ app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // OAuth ülesseadmine
 const oauth2 = simpleOauthModule.create({
@@ -131,7 +135,7 @@ app.get('/autenditud', (req, res) => {
     });
 });
 
-app.post('/salvesta', function (req, res) {
+app.post('/salvesta', (req, res) => {
   console.log(req.body);
   var sTekst = req.body.salvestatavtekst;
   const access_token = accessTokenFromCookies(req);

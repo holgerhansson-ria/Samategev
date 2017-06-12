@@ -34,12 +34,18 @@
         <!-- Tekstikoostepaan -->
         <div id='Tekstikoostepaan' class='paan d-flex align-items-start justify-items-center'>
           <form action="/salvesta" method="post">
-            <div id='STekstiblokk'>
-              <label class='active'>
-              Salvestatav tekst: <input id='SalvestatavTekst' name='salvestatavtekst' type='text' class='form-control' autocomplete='off'>
-              </label>
+            <div class="input-group">
+              <input
+                type="text"
+                id='SalvestatavTekst'
+                name='salvestatavtekst'
+                class="form-control"
+                autocomplete='off'
+                placeholder="Salvestatav sõnum...">
+              <span class="input-group-btn">
+                <button class="btn btn-secondary" type="submit">Salvesta!</button>
+              </span>
             </div>
-            <input class="btn btn-lg btn-secondary" type="submit">
           </form>
         </div>
 
