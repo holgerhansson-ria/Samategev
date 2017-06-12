@@ -71,7 +71,6 @@ const authorizationUri = oauth2.authorizationCode.authorizeURL({
 
 // Suunamine rakendusele õigust andma (Githubis)
 app.get('/auth', (req, res) => {
-  console.log(authorizationUri);
   res.redirect(authorizationUri);
 });
 
@@ -86,7 +85,7 @@ app.get('/OAuthCallback', (req, res) => {
       console.error('Viga juurdepääsutõendi pärimisel', error.message);
       return res.json('Autentimine ebaõnnestus');
     }
-    console.log('==Juurdepääsutõend: ', result);
+    console.log('Saadud Github-st juurdepääsutõend: ', result);
     // Selgitada, milleks järgnev kasulik on
     const token = oauth2.accessToken.create(result);
     // Juurdepääsutõendi saatmine küpsisesse panekuks - ettevalmistus
@@ -132,7 +131,8 @@ app.get('/autenditud', (req, res) => {
     });
 });
 
-app.post('/salvesta', function(req, res){
+app.post('/salvesta', function (req, res) {
+  console.log(req.body);
   var sTekst = req.body.salvestatavtekst;
   const access_token = accessTokenFromCookies(req);
   /* Salvestame teksti Githubi. Vt https://developer.github.com/v3/repos/contents/#create-a-file 
