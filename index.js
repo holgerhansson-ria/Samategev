@@ -6,6 +6,19 @@
 
  */
 
+/* 0 Abifunktsioonid
+   ------------------------------------------
+*/
+function b64EncodeUnicode(str) {
+    // Vt https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa 
+    // first we use encodeURIComponent to get percent-encoded UTF-8,
+    // then we convert the percent encodings into raw bytes which
+    // can be fed into btoa.
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+        function toSolidBytes(match, p1) {
+            return String.fromCharCode('0x' + p1);
+    }));
+}
 
 /* 1 Sõltuvuste importimine
    ------------------------------------------
@@ -68,7 +81,6 @@ app.get('/OAuthCallback', (req, res) => {
   const options = {
     code,
   };
-
   oauth2.authorizationCode.getToken(options, (error, result) => {
     if (error) {
       console.error('Viga juurdepääsutõendi pärimisel', error.message);
@@ -83,12 +95,17 @@ app.get('/OAuthCallback', (req, res) => {
   });
 });
 
-app.get('/autenditud', (req, res) => {
+function accessTokenFromCookies(req) {
   /* Juurdepääsutõendi väljavõtmine päringuga saadetud küpsisest */
   const GHtoend = req.cookies.GHtoend;
-  console.log('GHtoend: ' + GHtoend);
   const access_token = JSON.parse(GHtoend).token.access_token;
-  console.log('Ekstraheeritud juurdepääsutõend: ' + access_token);
+  console.log('Päringuga kaasas juurdepääsutõend: ' + access_token);
+  return access_token;
+}
+
+/* Tuleb esimest korda küpsisest kaasapandud juurdepääsutõendiga */
+app.get('/autenditud', (req, res) => {
+  const access_token = accessTokenFromCookies(req);
   /* Pärime kasutaja nime Github-st Vt. https://developer.github.com/v3/users/#get-the-authenticated-user
   */
   const GithubAPIURL = 'https://api.github.com/';
@@ -114,6 +131,49 @@ app.get('/autenditud', (req, res) => {
         .render('pages/autenditud', { kasutaja: saadudAndmed.login });
     });
 });
+
+app.post('/salvesta', function(req, res){
+  var sTekst = req.body.salvestatavtekst;
+  const access_token = accessTokenFromCookies(req);
+  /* Salvestame teksti Githubi. Vt https://developer.github.com/v3/repos/contents/#create-a-file 
+  PUT /repos/:owner/:repo/contents/:path
+  */
+
+  var sisu = {
+      message: 'Testimine',
+      committer: { 
+        name: "Priit Parmakson",
+        email: "priit.parmakson@gmail.com"
+      },
+      content: b64EncodeUnicode(sTekst)
+    };
+
+  const GithubAPIURL = 'https://api.github.com/';
+  var options = {
+    method: 'PUT',
+    url: GithubAPIURL + 'repos/PriitParmakson/Samatekst/contents/Tekst' + uid(6) + '.md',
+    headers: {
+      'User-Agent': 'Samatekst',
+      'Authorization': 'token ' + access_token
+    },
+    json: true,
+    body: sisu
+  };
+  requestModule(
+    options,
+    function (error, response, body) {
+      if (error) {
+        console.log('Viga kasutaja andmete pärimisel Github-st: ', error);
+      }
+      if (response) {
+        console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);
+      }
+      var saadudAndmed = JSON.parse(body);
+      console.log('kasutaja: ', saadudAndmed.login);
+      res.status(200)
+        .render('pages/autenditud', { kasutaja: saadudAndmed.login });
+    });
+})
 
 // Selgitada, mida see teeb
 app.get('/success', (req, res) => {

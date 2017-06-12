@@ -135,75 +135,18 @@ Värviskeem
 
   /* Paanide spetsiifilised elemendid */
     
-  #Infotekst, #KoolitekstSisemine {
+  /* Tekstikoostepaan */
+  #STekstiblokk {
     margin: 1rem;
-  }   
-  .klahv {
-    border-radius: 3px;
-    padding-left: 1px; padding-right: 1px;
-    border: 1px solid #757575;
-    font-family: 'Courier New', monospace;
   }
-
-  /* Tekstikogu */
-  .kirje { 
-    text-indent: -3rem;
-    padding-left: 3rem;
-    margin: 0;
+  #SalvestatavTekst {  margin: 1rem;
+    width: 24rem;
+    color: #757575 !important;
   }
-  .margend { 
-    border: 1px dotted Aqua;
-    border-radius: 2px;
-    padding: 2px;
-    font-family: 'Courier New', monospace;
-    font-size: 10pt;
-    text-transform: uppercase;
-    margin-left: 1rem; }
-  
-  /* Sirvimisnupud */
-  #Sirvimine {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1rem;
-  }
-  #PageNo { 
-    margin-left: 1rem; margin-right: 1rem;
-  }
-  #PageNo:after {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    height: 100%;
-  }
-
-  /* Filter */
-  #Filtritekst { margin: 1rem;
-    width: 8rem;
-    color: #757575 !important; }
-  #Filtritekst:focus {
+  #SalvestatavTekst:focus {
     border-color: #C5E1A5 !important;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.055) inset, 0 0 8px rgba(220, 180, 220, 0.6);
     outline: 0 none;      
-  }
-
-  /* Õigekirjakontrolli dialoog */
-  #KontrTekstiblokk {
-    margin: 1rem;
-  }
-  #KontrollitavTekst { 
-    width: 24rem;
-  }
-
-  /* SamatekstidTekstist dialoog */
-  #SamatekstidTekstistBlokk1 {
-    margin: 1rem;
-  }
-  #SamatekstidTekstistTekst {
-    width: 24rem;
-  }
-  #SamatekstidTekstistTulemus {
-    margin: 1rem;
   }
 
   /* Määra üle Bootstrapi lingivärv */
