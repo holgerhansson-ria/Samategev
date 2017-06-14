@@ -2,6 +2,8 @@
 title: Samategev
 ---
 
+[https://samategev.herokuapp.com](https://samategev.herokuapp.com)
+
 # "Node.js-Heroku-OAuth-Github" demonstraator 
 
 Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
@@ -126,8 +128,8 @@ PÄRING 6
 
 lisades päised (_HTTP Request Headers_):
 
-`'User-Agent': 'Samategev',
-'Authorization': 'token 4e18c6770d4dedc317501faaf2963ef8009dcb6f'`
+`User-Agent: Samategev,
+Authorization': token 4e18c6770d4dedc317501faaf2963ef8009dcb6f`
 
 `/user` tähendab kasutaja profiiliandmete pärimist.
 
@@ -138,3 +140,38 @@ lisades päised (_HTTP Request Headers_):
 <img src='img/P3.PNG' width='80%'>
 
 Sellega on kasutaja autentimine (sisselogimine) lõppenud.
+
+## Salvestamine GitHub-i
+
+7a. Autenditud kasutaja saab nüüd sisestada failinime ja teksti.
+
+<img src='img/P4.PNG' width='80%'>
+
+7b. Vajutab nupule `Salvesta`. Nupp on HTML-vormi `Submit`-element. Veebisirvija saadab selle peale serverile HTTP POST päringu:
+
+PÄRING 7
+
+`HTTP POST https://samategev.herokuapp.com/salvesta`
+
+Päringu parameetritena (`Form data`) saadetakse kasutaja sisestatud failinimi ja tekst:
+
+`failinimi: "MinuFail.md"
+salvestatavtekst: "See on sisu."`
+
+(Veebisirvija paneb päringule kaasa ka küpsisesse salvestatud juurdepääsutõendi).
+
+7c. Server saadab `HTTP PUT` päringu GitHub-i API-le:
+
+PÄRING 8
+
+`HTTP PUT https://api.github.com/repos/PriitParmakson/Samategev/contents/MinuFail.md`
+
+lisades päringupäised (_Headers_):
+
+`User-Agent: Samategev,
+Authorization: token 4e18c6770d4dedc317501faaf2963ef8009dcb6f` 
+
+Faili sisu saadetakse päringu kehas (`body`).
+
+GitHub-i API salvestab faili.
+
