@@ -1,0 +1,16 @@
+title: Samategev
+baseurl: "https://PriitParmakson.github.io/Samategev"
+
+defaults:
+  -
+    scope:
+      path: "" # Kõik failid
+    values:
+      layout: "Times"
+      draft: "false"
+      sidebar: "false"
+
+exclude:
+  - public
+  - views
+  
