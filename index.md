@@ -2,30 +2,30 @@
 title: Samategev
 ---
 
-Demorakendus "Node.js-Heroku-OAuth-Github" 
+# "Node.js-Heroku-OAuth-Github" demonstraator 
 
-Rakendus: 1) autentib kasutaja GitHub-i konto abil OAuth protokolli kohaselt; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
+Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
 
 ## Tööriistad ja tehnoloogiad
 
-Rakendus koosneb kasutaja veebisirvijas töötavast osast ja serveriosast. Veebisirvija osas on kasutatud standardseid ja laialtlevinud tehnoloogiaid: 
+Rakendus koosneb kasutaja veebisirvijas töötavast osast ja serveriosast.
 
-[HTML5](https://html.spec.whatwg.org/multipage/), [Javascript](https://www.ecma-international.org/publications/standards/Ecma-262.htm), [CSS](https://www.w3.org/Style/CSS/Overview.en.html), [Bootstrap 4](https://v4-alpha.getbootstrap.com/), [JQuery](https://jquery.com/)
+Veebisirvija osas on kasutatud standardseid tehnoloogiaid: [HTML5](https://html.spec.whatwg.org/multipage/), [Javascript](https://www.ecma-international.org/publications/standards/Ecma-262.htm), [CSS](https://www.w3.org/Style/CSS/Overview.en.html), [Bootstrap 4](https://v4-alpha.getbootstrap.com/), [JQuery](https://jquery.com/)
  
 Serveriosa põhineb [Node.js](https://nodejs.org/en/)-l, kasutusel on komponendid: [Express](https://expressjs.com/), [request](https://www.npmjs.com/package/request) (simplified HTTP request client), [body-parser](https://www.npmjs.com/package/body-parser), [cookie-parser](https://www.npmjs.com/package/cookie-parser) jt.
 Aluseks on Heroku näide [getting-started-with-nodejs](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
 
 Rakendus on majutatud [Heroku]((https://devcenter.heroku.com/)) pilveteenusesse.
 
-OAuth 2.0 kliendi teostamise aluseks on [simple-oauth2](http://lelylan.github.com/simple-oauth2/).
+OAuth 2.0 klient on teostatud [simple-oauth2](http://lelylan.github.com/simple-oauth2/) alusel.
 
-Dokumentatsioon on publitseeritud: [GitHub](https://github.com/), [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), [Jekyll](), [Liquid](https://shopify.github.io/liquid/), [Yaml](http://yaml.org/).
+Dokumentatsioon on publitseeritud vahenditega: [GitHub](https://github.com/), [Markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet), [Jekyll](), [Liquid](https://shopify.github.io/liquid/), [Yaml](http://yaml.org/).
 
-Sisemise töödokumentatsiooni loomiseks on kasutusel ka: [Google Docs](https://docs.google.com/document/u/0/), [Google Apps Script](https://developers.google.com/apps-script/).
+Töödokumentatsioonis on kasutusel ka: [Google Docs](https://docs.google.com/document/u/0/), [Google Apps Script](https://developers.google.com/apps-script/).
 
 Töövahendid: [Git Bash (Windows)](https://git-for-windows.github.io/), [Visual Studio Code](https://code.visualstudio.com/), [npm](https://www.npmjs.com/), [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), [Heroku veebi-dashboard](https://devcenter.heroku.com/), [curl](https://curl.haxx.se/) (Windows Git Bash koosseisus).
 
-## OAuth autentimine
+## OAuth autentimine (samm-sammuline sündmuste käik)
 
 Rakenduse URL on:
 
@@ -47,7 +47,7 @@ PÄRING 1:
 
 PÄRING 2
 
-`GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a`
+`HTTP GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a`
 
 Ümbersuunamis-URL-is on kuus OAuth autentimiseks vajalikku teabeelementi:
 
@@ -62,13 +62,13 @@ Rakenduse identifikaator on juhuslik sõne `ab5b4f1671a58e7ba35a`, mis moodustat
 
 Rakenduse registreerib GitHub-is rakenduse autor, oma konto all, valides `Settings` > `Developer Settings` > `OAuth Applications`. Otselink: [https://github.com/settings/developers](https://github.com/settings/developers).
 
-<img src='img/P1.PNG' width='50%'>
+<img src='img/P1.PNG' width='80%'>
 
 Samas saab näha ka mitu kasutajat on rakendusel.
 
 2b. GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
 
-<img src='img/P2.PNG' width='50%'>
+<img src='img/P2.PNG' width='80%'>
 
 2c. Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestada kasutaja GitHub-i konto parooli.
 
@@ -76,7 +76,7 @@ Samas saab näha ka mitu kasutajat on rakendusel.
 
 PÄRING 3
 
-`GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk`
+`HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk`
 
 3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe.
 
@@ -84,7 +84,7 @@ PÄRING 3
 
 PÄRING 4
 
-`GET https://github.com/login/oauth/access_token?code=71ed5797c3d957817d31&client_secret=<...>`
+`HTTP GET https://github.com/login/oauth/access_token?code=71ed5797c3d957817d31&client_secret=<...>`
 
 4a. Päringule paneb server kaasa kaks asja: ülalnimetatud turvakoodi (`71ed5797c3d957817d31`) ja rakenduse nn salakoodi (`client_secret`).
 
@@ -112,7 +112,7 @@ Vastus sisaldab ka ümbersuunamiskorraldust rakenduse lehele `/autenditud`.
 
 PÄRING 5
 
-`GET https://samategev.herokuapp.com/autenditud`
+`HTTP GET https://samategev.herokuapp.com/autenditud`
 
 Selles ja kõigis järgnevates päringutes paneb veebisirvija kaasa serverilt saadud küpsise (`GHtoend`). Tõend on kinnitus, et kasutaja GitHub-i identiteet on tuvastatud.
 
@@ -122,19 +122,19 @@ Selles ja kõigis järgnevates päringutes paneb veebisirvija kaasa serverilt sa
 
 PÄRING 6
 
-'GET https://api.github.com/user'
+`HTTP GET https://api.github.com/user`
 
 lisades päised (_HTTP Request Headers_):
 
-'User-Agent': 'Samategev',
-'Authorization': 'token 4e18c6770d4dedc317501faaf2963ef8009dcb6f'
+`'User-Agent': 'Samategev',
+'Authorization': 'token 4e18c6770d4dedc317501faaf2963ef8009dcb6f'`
 
-'/user' tähendab kasutaja profiiliandmete pärimist.
+`/user` tähendab kasutaja profiiliandmete pärimist.
 
 6b. GitHub-i API tagastab juurdepääsutõendile vastava GitHub-i kasutaja profiiliandmed (nime jm).
 
 6c. Server lisab saadud nime kasutajale päringu 5 vastuseks tagastatavasse HTML-teksti:
 
-<img src='img/P3.PNG' width='50%'>
+<img src='img/P3.PNG' width='80%'>
 
 Sellega on kasutaja autentimine (sisselogimine) lõppenud.
