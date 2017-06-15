@@ -7,7 +7,7 @@ $bluegrey100: #CFD8DC;
 /* ---- Keha -------- */
 body {
   max-width: 50em; margin: 0 0; 
-  padding: 0.6em 1.5em 2em 2em; 
+  padding: 1rem 1.5em 2em 2em; 
   line-height: 1.2;
   font-family: 'Courier News', monospace; 
   color: #333;
@@ -129,3 +129,10 @@ a[href]:active {
 }
 /* Märkus */
 .note { border: 1px solid Aquamarine; background-color: Azure; }
+
+/* Joon */
+hr { color: lightgrey }
+
+/* Joonis */
+.joonis { color: lightgrey;
+  border-top: 1px solid lightgrey; }

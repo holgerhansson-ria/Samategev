@@ -7,8 +7,14 @@ title: Samategev
 kood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev)
 
 # "Node.js-Heroku-OAuth-Github" demonstraator 
+{: .no_toc}
 
 Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
+
+Sisukord
+
+- TOC
+{:toc}
 
 ## Tööriistad ja tehnoloogiad
 
@@ -27,7 +33,45 @@ Dokumentatsioon on publitseeritud vahenditega: [GitHub](https://github.com/), [M
 
 Töödokumentatsioonis on kasutusel ka: [Google Docs](https://docs.google.com/document/u/0/), [Google Apps Script](https://developers.google.com/apps-script/).
 
-Töövahendid: [Git Bash (Windows)](https://git-for-windows.github.io/), [Visual Studio Code](https://code.visualstudio.com/), [npm](https://www.npmjs.com/), [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), [Heroku veebi-dashboard](https://devcenter.heroku.com/), [curl](https://curl.haxx.se/) (Windows Git Bash koosseisus).
+Töövahendid: [Git Bash (Windows)](https://git-for-windows.github.io/), [Visual Studio Code](https://code.visualstudio.com/), [npm](https://www.npmjs.com/), [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), [Heroku veebi-dashboard](https://devcenter.heroku.com/), [curl](https://curl.haxx.se/) (Windows Git Bash koosseisus), [asciiflow](http://asciiflow.com/).
+
+## Arhitektuurijoonis
+
+Joonis 1
+{: .joonis}
+
+```
+       ,+.
+       `|'
+       /|\
+        +
+       / \
+    Kasutaja
+
++--------------+
+|              |
+| Veebisirvija |
+|      osa     +-----------------------------------+
+|              |                                   |
+|              +----------------+                  |
++------+-------+                v                  v
+       v
+       O                        O                  O
+       +                        +                  +
++------+-------+         +------+-------+  +-------+-------+
+|              |         |              |  |               |
+|   Serveri    |         | GitHub OAuth |  |   GitHub-i    |
+|     osa      +-->  O+--+ autentimis-  |  |     repo      |
+|              |         |   teenus     |  |               |
+|   (Heroku)   |         |              |  |               |
++------+-------+         +--------------+  +-------+-------+
+       |                                           +
+       +-----------------------------------------> O
+
+                                              GitHub API
+```
+
+<hr>
 
 ## OAuth autentimine (samm-sammuline sündmuste käik)
 
@@ -66,13 +110,23 @@ Rakenduse identifikaator on juhuslik sõne `ab5b4f1671a58e7ba35a`, mis moodustat
 
 Rakenduse registreerib GitHub-is rakenduse autor, oma konto all, valides `Settings` > `Developer Settings` > `OAuth Applications`. Otselink: [https://github.com/settings/developers](https://github.com/settings/developers).
 
+Kuvapildistus 1
+{: .joonis}
+
 <img src='img/P1.PNG' width='80%'>
+
+<hr>
 
 Samas saab näha ka mitu kasutajat on rakendusel.
 
 2b. GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
 
+Kuvapildistus 2
+{: .joonis}
+
 <img src='img/P2.PNG' width='80%'>
+
+<hr>
 
 2c. Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestada kasutaja GitHub-i konto parooli.
 
@@ -143,7 +197,12 @@ User-Agent: Samategev,
 
 6c. Server lisab saadud nime kasutajale päringu 5 vastuseks tagastatavasse HTML-teksti:
 
+Kuvapildistus 3
+{: .joonis}
+
 <img src='img/P3.PNG' width='80%'>
+
+<hr>
 
 Sellega on kasutaja autentimine (sisselogimine) lõppenud.
 
@@ -151,7 +210,12 @@ Sellega on kasutaja autentimine (sisselogimine) lõppenud.
 
 7a. Autenditud kasutaja saab nüüd sisestada failinime ja teksti.
 
+Kuvapildistus 4
+{: .joonis}
+
 <img src='img/P4.PNG' width='80%'>
+
+<hr>
 
 7b. Vajutab nupule `Salvesta`. Nupp on HTML-vormi `Submit`-element. Veebisirvija saadab selle peale serverile HTTP POST päringu:
 
@@ -183,4 +247,20 @@ Faili sisu saadetakse päringu kehas (`body`).
 
 GitHub-i API salvestab faili.
 
+Kuvapildistus 5
+{: .joonis}
+
 <img src='img/P5.PNG' width='80%'>
+
+<hr>
+
+## Ohud
+
+OAuth on selles mõttes hea protokoll, et turvariskide kohta on kohe omaette dokument: [OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819). Kahjuks ei piisa dokumendi läbilugemisest - ja ega esimese lugemisega palju aru saagi. Turvameetmeid tuleb rakendada mitmes kohas. See vajab mõtlemist ja tähelepanu, sest võimalusi "ämbrisse astumiseks" on palju. GitHub teeb OAuth autentimisteenuse pakkujana head tööd. Neil on jooksmas algoritmid, mis jälgivad muuhulgas ka seda, et keegi turvavõtmeid ja -tõendeid GitHub-i avalikesse repodesse üles ei laadiks. Mina tegin selle vea ja sain kohe hoiatuskirja:
+
+Kuvapildistus 6
+{: .joonis}
+
+<img src='img/P6.PNG' width='95%'>
+
+<hr>
