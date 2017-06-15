@@ -12,7 +12,7 @@ Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvest
 
 Rakendus koosneb kasutaja veebisirvijas töötavast osast ja serveriosast.
 
-Veebisirvija osas on kasutatud standardseid tehnoloogiaid: [HTML5](https://html.spec.whatwg.org/multipage/), [Javascript](https://www.ecma-international.org/publications/standards/Ecma-262.htm), [CSS](https://www.w3.org/Style/CSS/Overview.en.html), [Bootstrap 4](https://v4-alpha.getbootstrap.com/), [JQuery](https://jquery.com/)
+Veebisirvija osas on kasutatud standardseid tehnoloogiaid: [HTML5](https://html.spec.whatwg.org/multipage/), [Javascript](https://www.ecma-international.org/publications/standards/Ecma-262.htm), [CSS](https://www.w3.org/Style/CSS/Overview.en.html), [Bootstrap 4](https://v4-alpha.getbootstrap.com/), [JQuery](https://jquery.com/).
  
 Serveriosa põhineb [Node.js](https://nodejs.org/en/)-l, kasutusel on komponendid: [Express](https://expressjs.com/), [request](https://www.npmjs.com/package/request) (simplified HTTP request client), [body-parser](https://www.npmjs.com/package/body-parser), [cookie-parser](https://www.npmjs.com/package/cookie-parser) jt.
 Aluseks on Heroku näide [getting-started-with-nodejs](https://devcenter.heroku.com/articles/getting-started-with-nodejs).
@@ -37,13 +37,13 @@ Rakenduse URL on:
 
 1b. Kasutaja vajutab lingile `Logi sisse GitHub-ga`.
 
-1c. Veebisirvijast läheb serverisse HTTP GET päring URL-ga `https://samategev.herokuapp.com/auth`):
+1c. Veebisirvijast läheb serverisse HTTP GET päring URL-ga `https://samategev.herokuapp.com/auth`:
 
 PÄRING 1:
 
 `HTTP GET https://samategev.herokuapp.com/auth`
 
-1d. Server saadab päringule vastuseks ümbersuunamiskorralduse (_Redirect_) GitHub-i OAuth autentimisteenusesse. HTTP vastuse staatusekood on `302`. Ümbersuunamiskorralduses saadab server veebisirvijale GitHubi autentimisteenuse URL-i.
+1d. Server saadab päringule vastuseks ümbersuunamiskorralduse (_Redirect_) GitHub-i OAuth autentimisteenusesse. HTTP vastuse staatusekood on `302`. Ümbersuunamiskorralduses saadab server veebisirvijale GitHubi autentimisteenuse URL-i `https://github.com/login/oauth/authorize` ja veel viis olulist teabeelementi (nendest kohe allpool).
 
 2a. Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
 
@@ -74,6 +74,8 @@ Samas saab näha ka mitu kasutajat on rakendusel.
 
 2c. Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestada kasutaja GitHub-i konto parooli.
 
+Märkus. Kasutaja saab nõusoleku GitHub-is igal ajal tagasi võtta. Otselink: [https://github.com/settings/applications](https://github.com/settings/applications).
+
 2d. Seejärel saadab GitHub-i autentimisteenus kasutaja veebisirvijale ümbersuunamiskorralduse, millega veebisirvija suunatakse tagasi rakendusse:
 
 PÄRING 3
@@ -82,7 +84,7 @@ PÄRING 3
 
 3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe.
 
-3b. Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile 'https://github.com/login/oauth/access_token'.
+3b. Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile `https://github.com/login/oauth/access_token`.
 
 PÄRING 4
 
@@ -128,8 +130,10 @@ PÄRING 6
 
 lisades päised (_HTTP Request Headers_):
 
-`User-Agent: Samategev,
-Authorization': token 4e18c6770d4dedc317501faaf2963ef8009dcb6f`
+```
+User-Agent: Samategev,
+ Authorization: token 4e18c6770d4dedc317501faaf2963ef8009dcb6f
+```
 
 `/user` tähendab kasutaja profiiliandmete pärimist.
 
@@ -155,8 +159,10 @@ PÄRING 7
 
 Päringu parameetritena (`Form data`) saadetakse kasutaja sisestatud failinimi ja tekst:
 
-`failinimi: "MinuFail.md"
-salvestatavtekst: "See on sisu."`
+```
+failinimi: "MinuFail.md"
+salvestatavtekst: "See on sisu."
+```
 
 (Veebisirvija paneb päringule kaasa ka küpsisesse salvestatud juurdepääsutõendi).
 
@@ -175,3 +181,4 @@ Faili sisu saadetakse päringu kehas (`body`).
 
 GitHub-i API salvestab faili.
 
+<img src='img/P5.PNG' width='80%'>
