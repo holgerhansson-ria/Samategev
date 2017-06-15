@@ -264,3 +264,36 @@ Kuvapildistus 6
 <img src='img/P6.PNG' width='95%'>
 
 <hr>
+
+## LISA Marsruutimisskeem (URL-de järjekord)
+
+Joonis 2
+{: .joonis}
+
+```
+                             Autentima
+           Avaleht   +--->    "/auth"           R
+     +-->    "/"                       +------+
+     |                                        |
+   R |                                        v
+     |
+     +                                      GitHub-i
+Välja logima                                autentimisdialoogi
+ "/logout"                                  lehed
+
+      ^                                       +
+      |                                       |
+      |                                       |  R
+      |                                       v
+      |
+      |                                   Autentimiselt
+   Salvesta         Autenditud                tagasi
+  "/salvesta" <--+  "/autenditud"  <----+ "/OAuthCallback"
+
+                                     R
+
+
+   R = ümbersuunamine (redirect)
+```
+
+

@@ -131,8 +131,11 @@ a[href]:active {
 .note { border: 1px solid Aquamarine; background-color: Azure; }
 
 /* Joon */
-hr { color: lightgrey }
+hr { color: gray; }
 
 /* Joonis */
-.joonis { color: lightgrey;
-  border-top: 1px solid lightgrey; }
+.joonis { color: gray;
+  border-top: 1px solid gray;
+  font-family: 'Roboto';
+  letter-spacing: 0.2pt;
+  font-size: 8pt; }
