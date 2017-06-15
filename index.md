@@ -4,6 +4,8 @@ title: Samategev
 
 [https://samategev.herokuapp.com](https://samategev.herokuapp.com)
 
+kood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev)
+
 # "Node.js-Heroku-OAuth-Github" demonstraator 
 
 Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
