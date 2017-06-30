@@ -35,6 +35,8 @@ Töödokumentatsioonis on kasutusel ka: [Google Docs](https://docs.google.com/do
 
 Töövahendid: [Git Bash (Windows)](https://git-for-windows.github.io/), [Visual Studio Code](https://code.visualstudio.com/), [npm](https://www.npmjs.com/), [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), [Heroku veebi-dashboard](https://devcenter.heroku.com/), [curl](https://curl.haxx.se/) (Windows Git Bash koosseisus), [asciiflow](http://asciiflow.com/).
 
+Teabeallikad: [StackOverflow](https://stackoverflow.com/).
+
 ## Arhitektuurijoonis
 
 Joonis 1
