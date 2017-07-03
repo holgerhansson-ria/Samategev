@@ -101,7 +101,11 @@ Server saadab päringule vastuseks ümbersuunamiskorralduse (_redirect_) GitHub-
 
 ```
 302 Found
-Location: https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsamategev.herokuapp.com%2FOAuthCallback&scope=user%20public_repo&state=hkMVY7vjuN7xyLl5&response_type=code&client_id=ab5b4f1671a58e7ba35a
+Location: https://github.com/login/oauth/authorize?
+redirect_uri=https%3A%2F%2Fsamategev.herokuapp.com%2F
+OAuthCallback&scope=user%20public_repo&
+state=hkMVY7vjuN7xyLl5&response_type=code&
+client_id=ab5b4f1671a58e7ba35a
 ```
 
 Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
@@ -109,7 +113,10 @@ Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
 ***PÄRING 3***
 
 ```
-HTTP GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a
+HTTP GET https://github.com/login/oauth/authorize?
+redirect_uri=https://samategev.herokuapp.com/OAuthCallback&
+scope=user public_repo&state=OFfVLKu0kNbJ2EZk&
+response_type=code&client_id=ab5b4f1671a58e7ba35a
 ```
 
 Ümbersuunamis-URL-is on kuus OAuth autentimiseks vajalikku teabeelementi:
@@ -150,7 +157,8 @@ Seejärel saadab GitHub-i autentimisteenus kasutaja veebisirvijale ümbersuunami
 ***PÄRING 4***
 
 ```
-HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk
+HTTP GET https://samategev.herokuapp.com/OAuthCallback?
+code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk
 ```
 
 Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe ja ründaja protsessi ei saa vahele sekkuda.
@@ -160,7 +168,8 @@ Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimistee
 ***PÄRING 5***
 
 ```
-HTTP GET https://github.com/login/oauth/access_token?code=71ed5797c3d957817d31&client_secret=<...>
+HTTP GET https://github.com/login/oauth/access_token?
+code=71ed5797c3d957817d31&client_secret=<...>
 ```
 
 Päringule paneb server kaasa kaks asja: ülalnimetatud turvakoodi (`71ed5797c3d957817d31`) ja rakenduse nn salakoodi (`client_secret`).
@@ -175,7 +184,7 @@ GitHub-i autentimisteenus saadab turvakoodi vastu juurdepääsutõendi (_access 
 200 OK
 
  { "token" : {
-   "access_token" : "4e18c6770d4dedc317501faaf2963ef8009dcb6f",
+   "access_token" : "<pikk juhusõne>",
    "token_type" : "bearer",
    "scope" : "public_repo,user",
    "expires_at":null }
@@ -190,15 +199,20 @@ Server koostab nüüd vastuse päringule 4. Vastuses saadab server küpsise (_co
 302 Found
 
 Location: /autenditud
-Set-Cookie: GHtoend=%7B%22token%22%3A%7B%22access_token%22%3A%229f9e2aa0cf0697a14a14e6d5e72f277af7d5004d%22%2C%22token_type%22%3A%22bearer%22%2C%22scope%22%3A%22public_repo%2Cuser%22%2C%22expires_at%22%3Anull%7D%7D; Path=/
+Set-Cookie: GHtoend=%7B%22token%22%3A%7B%22
+access_token%22%3A%22<pikk juhusõne>%22
+token_type%22%3A%22bearer%22%2C%22
+scope%22%3A%22public_repo%2Cuser%22%2C%22
+expires_at%22%3Anull%7D%7D; Path=/
 ```
 
 Dešifreeritult (URL-encoded kujust tavakujule teisendatult) on küpsise sisu järgmine:
 
 ```
 GHtoend={"token":
-{"access_token":"4e18c6770d4dedc317501faaf2963ef8009dcb6f",
-"token_type":"bearer","scope":"public_repo,user","expires_at":null}}
+{"access_token":"<pikk juhusõne>",
+"token_type":"bearer","scope":"public_repo,user",
+"expires_at":null}}
 ; Path=/
 ```
 
@@ -215,7 +229,9 @@ HTTP GET https://samategev.herokuapp.com/autenditud
 Selles ja kõigis järgnevates päringutes paneb veebisirvija kaasa serverilt saadud küpsise (`GHtoend`). Tõend on kinnitus, et kasutaja GitHub-i identiteet on tuvastatud.
 
 ```
-Cookie: GHtoend	{"token":{"access_token":"9f9e2aa0cf0697a14a14e6d5e72f277af7d5004d","token_type":"bearer","scope":"public_repo,user","expires_at":null}}
+Cookie: GHtoend	{"token":{"access_token":"<pikk juhusõne>",
+"token_type":"bearer","scope":"public_repo,user",
+"expires_at":null}}
 ```
 
 Vastuseks tagastab server HTML-lehe, kus märgib, et kasutaja on autenditud ja kuvab ka kasutaja nime.
@@ -236,7 +252,7 @@ Autenditud kasutaja nimi kuvatakse autenditud oleku lehel. Kust server kasutaja 
 HTTP GET https://api.github.com/user
 
 User-Agent: Samategev
-Authorization: token 4e18c6770d4dedc317501faaf2963ef8009dcb6f
+Authorization: token <pikk juhusõne>
 ```
 
 `/user` tähendab kasutaja profiiliandmete pärimist. GitHub nõuab, et päringu päisena teatab server ka andmeid küsiva rakenduse nim (`Samategev`).
@@ -275,7 +291,9 @@ Kasutaja vajutab nupule `Salvesta`. Tehniliselt on nupp HTML-vormi `Submit`-elem
 HTTP POST https://samategev.herokuapp.com/salvesta
 
 Content-Type: application/x-www-form-urlencoded
-Cookie: GHtoend	{"token":{"access_token":"9f9e2aa0cf0697a14a14e6d5e72f277af7d5004d","token_type":"bearer","scope":"public_repo,user","expires_at":null}}
+Cookie: GHtoend	{"token":{"access_token":"<pikk juhusõne>",
+"token_type":"bearer","scope":"public_repo,user",
+"expires_at":null}}
 
 <Form data>
 failinimi	"MinuFail.md"
@@ -289,13 +307,14 @@ Server saadab `HTTP PUT` päringu GitHub-i API-le:
 ***PÄRING 9***
 
 ```
-HTTP PUT https://api.github.com/repos/PriitParmakson/Samategev/contents/MinuFail.md
+HTTP PUT https://api.github.com/repos/PriitParmakson/
+Samategev/contents/MinuFail.md
 ```
 
 lisades päringupäised (_Headers_):
 
 `User-Agent: Samategev,
-Authorization: token 4e18c6770d4dedc317501faaf2963ef8009dcb6f` 
+Authorization: token <pikk juhusõne>` 
 
 Faili sisu saadetakse päringu kehas (`body`).
 
@@ -357,7 +376,6 @@ Välja logima                                autentimisdialoogi
   "/salvesta" <--+  "/autenditud"  <----+ "/OAuthCallback"
 
                                      R
-
 
    R = ümbersuunamine (redirect)
 ```
