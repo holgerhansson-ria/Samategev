@@ -133,7 +133,6 @@ response_type=code&client_id=ab5b4f1671a58e7ba35a
 Kuvapildistus 1
 {: .joonis}
 
----
 <img src='img/P1.PNG' width='80%' style='border: 1px solid Gray;'>
 
 ---
@@ -145,7 +144,6 @@ GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
 Kuvapildistus 2
 {: .joonis}
 
----
 <img src='img/P2.PNG' width='350px' style='border: 1px solid Gray;'>
 
 ---
@@ -264,7 +262,6 @@ Server lisab saadud nime kasutajale päringu 5 vastuseks tagastatavasse HTML-tek
 Kuvapildistus 3
 {: .joonis}
 
----
 <img src='img/P3.PNG' width='450px' style='border: 1px solid Gray;'>
 
 ---
@@ -278,7 +275,6 @@ Autenditud kasutaja saab nüüd sisestada failinime ja teksti.
 Kuvapildistus 4
 {: .joonis}
 
----
 <img src='img/P4.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
@@ -323,7 +319,6 @@ GitHub-i API salvestab faili.
 Kuvapildistus 5
 {: .joonis}
 
----
 <img src='img/P5.PNG' width='400px' style='border: 1px solid Gray;'>
 
 ---
@@ -333,7 +328,6 @@ Kui midagi läheb untsu, siis annab programm intelligentselt veateate. Näiteks,
 Kuvapildistus 6
 {: .joonis}
 
----
 <img src='img/P7.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
