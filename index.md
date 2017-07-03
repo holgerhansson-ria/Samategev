@@ -16,6 +16,11 @@ Demorakenduse eesmärk on järgi proovida ja näitlikult kirjeldada mitme tehnol
 3) `OAuth 2.0` kui autentimisraamistik;
 4) `GitHub` kui salvestuslahendus.
 
+<img src='img/NodeJS.PNG' style='width: 7rem;'>
+<img src='img/Heroku.PNG'>
+<img src='img/oauth-2-sm.png' style='width: 4rem;'>
+<img src='img/GitHub.PNG' style='width: 4rem;'>
+
 Rakendus:
 1) autendib kasutaja GitHub-i OAuth autentimisteenuse abil ja
 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
