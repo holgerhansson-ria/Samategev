@@ -2,79 +2,95 @@
 title: Samategev
 ---
 
-[https://samategev.herokuapp.com](https://samategev.herokuapp.com)
+Rakendus: [https://samategev.herokuapp.com](https://samategev.herokuapp.com)
 
-kood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev)
+Lähtekood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev)
 
-# "Node.js-Heroku-OAuth-Github" demonstraator 
+# OAuth demorakendus 
 {: .no_toc}
 
-Rakendus: 1) autentib kasutaja GitHub-i OAuth autentimisteenuse abil; 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
+Demorakenduse eesmärk on järgi proovida ja näitlikult kirjeldada mitme tehnoloogia kasutamine:
+
+1) `Node.js` kui veebirakenduse serveripoolse komponendi raamistik;
+2) `Heroku` kui majutusteenus;
+3) `OAuth 2.0` kui autentimisraamistik;
+4) `GitHub` kui salvestuslahendus.
+
+Rakendus:
+1) autendib kasutaja GitHub-i OAuth autentimisteenuse abil ja
+2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
 
 Sisukord
 
 - TOC
 {:toc}
 
-## Arhitektuurijoonis
+## Arhitektuur
+
+Suhtlevaid komponente ja teenuseid on neli:
+- Veebirakenduse serveripoolne komponent (`https://samategev.herokuapp.com`)
+- Veebirakenduse sirvijasse laetav komponent
+- GitHub OAuth autentimisteenus
+- GitHub-i API.
+
+Kogu suhtlus toimub HTTPS protokolli järgi.
 
 Joonis 1
 {: .joonis}
 
 ```
-                                 ,+.
-                                 `|'
-                                 /|\
-                                  +
-                                 / \
-                              Kasutaja
+                                     ,+.
+                                     `|'
+                                     /|\
+                                      +
+                                     / \
+                                  Kasutaja
 
-                             +--------------+
-                             |              |
-                             | Veebisirvija |
-                             |      osa     +-----------------------+
-                             |              |                       |
-                             |              |                       |
-                             +----+---------+                       v
-                                  |
-                                  |    ^
-                                  |    |
-                                  v    |
-                                       |                            O
-+--------------+             +---------+----+               +---------------+
-|              |             |              |               |               |
-| GitHub OAuth |             |   Serveri    |               |   GitHub-i    |
-| autentimis-  |O   <--------+     osa      +----------->  O|     repo      |
-|   teenus     |             |              |               |               |
-|              |             |   (Heroku)   |               |               |
-+--------------+             +--------------+               +---------------+
+                                 +--------------+
+                                 |              |
+                                 | Veebisirvija |
+                                 |      osa     +-----------------------+
+                                 |              |                       |
+                                 |              |                       |
+                                 +----+---------+                       v
+                                      |
+                                      |    ^
+                                      |    |
+                                      v    |
+                                           |                            O
+    +--------------+             +---------+----+               +---------------+
+    |              |             |              |               |               |
+    | GitHub OAuth |             |   Serveri    |               |   GitHub+i    |
+    | autentimis-  |O   <--------+     osa      +----------->  O|     repo      |
+    |   teenus     |             |              |               |               |
+    |              |             |   (Heroku)   |               |               |
+    +--------------+             +--------------+               +---------------+
+github.com/login/oauth        samategev.herokuapp.com           api.github.com
 ````
 
 ## Samm-sammuline läbikäik (walkthrough)
 
-Käime läbi OAuth autentimisprotseduuri, jälgides, milliseid sõnumeid osapoolte vahel saadetakse. Näitlik on asi ise läbi teha, jälgides sõnumiliiklust sirvija arendustööriistade (Firefox-is Developer Tools võrguliikluse jälgimise tööriist, Chrome-is või Edge-s on samuti vastavad vahendid) abil.
+Käime läbi OAuth autentimisprotseduuri. Näitlik on asi ise läbi teha, jälgides osapoolte vahelist sõnumiliiklust sirvija arendustööriista (Firefox-is Developer Tools võrguliikluse jälgimise tööriist, Chrome-is või Edge-s on samuti vastavad vahendid) abil.
 
-Rakenduse URL on: `https://samategev.herokuapp.com`
-
-Kasutaja läheb rakenduse avalehele. Sirvijast tehakse
+Rakenduse URL on: `https://samategev.herokuapp.com`. Kasutaja läheb rakenduse avalehele. Sirvijast tehakse
 
 ***PÄRING 1***
 
 `HTTP GET https://samategev.herokuapp.com`
 
-1b. Rakenduse avaleht laetakse sirvijasse.
+Rakenduse serveripoolne komponent saadab sirvijasse rakenduse avalehe.
 
 ***VASTUS 1***
 
 `200 OK <rakenduse avaleht>`
 
-2a. Avalehel esitatakse lühike teave rakenduse kohta ja ettepanek `Logi sisse GitHub-ga`. Kasutaja vajutab lingile `Logi sisse GitHub-ga`. Veebisirvijast läheb serverisse
+Avalehel esitatakse lühike teave rakenduse kohta ja ettepanek `Logi sisse GitHub-ga`. Kasutaja vajutab lingile `Logi sisse GitHub-ga`. Veebisirvijast läheb serverisse
 
 ***PÄRING 2***
 
 `HTTP GET https://samategev.herokuapp.com/auth`
 
-2b. Server saadab päringule vastuseks ümbersuunamiskorralduse (_Redirect_) GitHub-i OAuth autentimisteenusesse. HTTP vastuse staatusekood on `302`. Ümbersuunamiskorralduses saadab server veebisirvijale GitHubi autentimisteenuse URL-i `https://github.com/login/oauth/authorize` ja veel viis olulist teabeelementi (nendest kohe allpool).
+Server saadab päringule vastuseks ümbersuunamiskorralduse (_redirect_) GitHub-i OAuth autentimisteenusesse. HTTP vastuse staatusekood on `302`. Ümbersuunamiskorralduses saadab server veebisirvijale GitHubi autentimisteenuse URL-i `https://github.com/login/oauth/authorize` ja veel viis olulist teabeelementi (nendest kohe allpool).
 
 ***VASTUS 2***
 
@@ -83,9 +99,9 @@ Kasutaja läheb rakenduse avalehele. Sirvijast tehakse
 Location: https://github.com/login/oauth/authorize?redirect_uri=https%3A%2F%2Fsamategev.herokuapp.com%2FOAuthCallback&scope=user%20public_repo&state=hkMVY7vjuN7xyLl5&response_type=code&client_id=ab5b4f1671a58e7ba35a
 ```
 
-3a. Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
+Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
 
-PÄRING 3
+***PÄRING 3***
 
 `HTTP GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a`
 
@@ -100,23 +116,23 @@ PÄRING 3
 
 ***Rakenduse registreerimine identiteedipakkujas***. Rakenduse identifikaator (OAUth terminoloogias - _client ID_) on juhuslik sõne `ab5b4f1671a58e7ba35a`, mis moodustatakse rakenduse registreerimisel GitHub-is OAuth-i rakendusena. Rakenduse registreerib GitHub-is rakenduse autor, oma konto all, valides `Settings` > `Developer Settings` > `OAuth Applications`. Otselink: [https://github.com/settings/developers](https://github.com/settings/developers). GitHub-is OAuth-teenuses näeb rakenduse registreerimine välja nii:
 
----
 Kuvapildistus 1
 {: .joonis}
 
-<img src='img/P1.PNG' width='80%'>
+---
+<img src='img/P1.PNG' width='80%' style='border: 1px solid Gray;'>
 
 ---
 
 GitHub-i OAuth rakenduste registreerimislehel saab näha ka mitu kasutajat on rakendusel.
 
-3b. GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
+GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
 
----
 Kuvapildistus 2
 {: .joonis}
 
-<img src='img/P2.PNG' width='80%'>
+---
+<img src='img/P2.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
 
@@ -126,36 +142,38 @@ Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestad
 
 ***PÄRING 4***
 
-`HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk`
+```
+HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk
+```
 
-<<<<<<< HEAD
-Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (_authorization code_) (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe.
-=======
-3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe ja ründaja protsessi ei saa vahele sekkuda.
->>>>>>> 12cd7a4a631518d36bbb7884e8021c1fc75588e6
+Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe ja ründaja protsessi ei saa vahele sekkuda.
 
-5. Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile `https://github.com/login/oauth/access_token`.
+Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile `https://github.com/login/oauth/access_token`.
 
 ***PÄRING 5***
 
-`HTTP GET https://github.com/login/oauth/access_token?code=71ed5797c3d957817d31&client_secret=<...>`
+```
+HTTP GET https://github.com/login/oauth/access_token?code=71ed5797c3d957817d31&client_secret=<...>
+```
 
 Päringule paneb server kaasa kaks asja: ülalnimetatud turvakoodi (`71ed5797c3d957817d31`) ja rakenduse nn salakoodi (`client_secret`).
 
 Rakenduse salakood genereeritakse rakenduse registreerimisel GitHub-is (vt ülalpool). Erinevalt rakenduse identifikaatorist (`client_id`) on salakood salajane. Salakood võimaldab GitHub-il veenduda, et turvakoodi saadab ikka õige rakendus.
 
-6. GitHub-i autentimisteenus saadab turvakoodi vastu juurdepääsutõendi (_access token_).
+GitHub-i autentimisteenus saadab turvakoodi vastu juurdepääsutõendi (_access token_).
 
 ***VASTUS 5***
 
-`200 OK
+```
+200 OK
 
  { "token" : {
    "access_token" : "4e18c6770d4dedc317501faaf2963ef8009dcb6f",
    "token_type" : "bearer",
    "scope" : "public_repo,user",
    "expires_at":null }
-  }`
+  }
+```
 
 Server koostab nüüd vastuse päringule 4. Vastuses saadab server küpsise (_cookie_) veebisirvijasse asetamiseks. Küpsisesse paneb server GitHub-i autentimisteenusest saadud juurdepääsutõendi.
 
@@ -170,10 +188,12 @@ Set-Cookie: GHtoend=%7B%22token%22%3A%7B%22access_token%22%3A%229f9e2aa0cf0697a1
 
 Dešifreeritult (URL-encoded kujust tavakujule teisendatult) on küpsise sisu järgmine:
 
-`GHtoend={"token":
+```
+GHtoend={"token":
 {"access_token":"4e18c6770d4dedc317501faaf2963ef8009dcb6f",
 "token_type":"bearer","scope":"public_repo,user","expires_at":null}}
-; Path=/`
+; Path=/
+```
 
 Vastus sisaldab ka ümbersuunamiskorraldust rakenduse lehele `/autenditud`.
 
@@ -181,11 +201,15 @@ Veebisirvija salvestab saadud küpsise ja täidab korralduse, tehes järgmise p�
 
 ***PÄRING 6***
 
-`HTTP GET https://samategev.herokuapp.com/autenditud`
+```
+HTTP GET https://samategev.herokuapp.com/autenditud
+```
 
 Selles ja kõigis järgnevates päringutes paneb veebisirvija kaasa serverilt saadud küpsise (`GHtoend`). Tõend on kinnitus, et kasutaja GitHub-i identiteet on tuvastatud.
 
-`Cookie: GHtoend	{"token":{"access_token":"9f9e2aa0cf0697a14a14e6d5e72f277af7d5004d","token_type":"bearer","scope":"public_repo,user","expires_at":null}}`
+```
+Cookie: GHtoend	{"token":{"access_token":"9f9e2aa0cf0697a14a14e6d5e72f277af7d5004d","token_type":"bearer","scope":"public_repo,user","expires_at":null}}
+```
 
 Vastuseks tagastab server HTML-lehe, kus märgib, et kasutaja on autenditud ja kuvab ka kasutaja nime.
 
@@ -214,11 +238,11 @@ GitHub-i API tagastab juurdepääsutõendile vastava GitHub-i kasutaja profiilia
 
 Server lisab saadud nime kasutajale päringu 5 vastuseks tagastatavasse HTML-teksti:
 
----
 Kuvapildistus 3
 {: .joonis}
 
-<img src='img/P3.PNG' width='80%'>
+---
+<img src='img/P3.PNG' width='400px' style='border: 1px solid Gray;'>
 
 ---
 
@@ -228,11 +252,11 @@ Sellega on kasutaja autentimine (sisselogimine) lõppenud.
 
 Autenditud kasutaja saab nüüd sisestada failinime ja teksti.
 
----
 Kuvapildistus 4
 {: .joonis}
 
-<img src='img/P4.PNG' width='80%'>
+---
+<img src='img/P4.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
 
@@ -257,7 +281,9 @@ Server saadab `HTTP PUT` päringu GitHub-i API-le:
 
 ***PÄRING 9***
 
-`HTTP PUT https://api.github.com/repos/PriitParmakson/Samategev/contents/MinuFail.md`
+```
+HTTP PUT https://api.github.com/repos/PriitParmakson/Samategev/contents/MinuFail.md
+```
 
 lisades päringupäised (_Headers_):
 
@@ -268,21 +294,21 @@ Faili sisu saadetakse päringu kehas (`body`).
 
 GitHub-i API salvestab faili.
 
----
 Kuvapildistus 5
 {: .joonis}
 
-<img src='img/P5.PNG' width='80%'>
+---
+<img src='img/P5.PNG' width='400px' style='border: 1px solid Gray;'>
 
 ---
 
 Kui midagi läheb untsu, siis annab programm intelligentselt veateate. Näiteks, kui proovime luua faili, mis on juba olemas (ülekirjutamiseks on teine käsk):
 
----
 Kuvapildistus 6
 {: .joonis}
 
-<img src='img/P7.PNG' width='80%'>
+---
+<img src='img/P7.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
 
@@ -294,7 +320,7 @@ OAuth on selles mõttes hea protokoll, et turvariskide kohta on kohe omaette dok
 Kuvapildistus 7
 {: .joonis}
 
-<img src='img/P6.PNG' width='95%'>
+<img src='img/P6.PNG' width='500px' style='border: 1px solid Gray;'>
 
 ---
 
