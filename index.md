@@ -337,7 +337,7 @@ Kuvapildistus 6
 
 ---
 
-## Ohud
+## Ämbrisse astumised
 
 OAuth on selles mõttes hea protokoll, et turvariskide kohta on kohe omaette dokument: [OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819). Kahjuks ei piisa dokumendi läbilugemisest - ja ega esimese lugemisega palju aru saagi. Turvameetmeid tuleb rakendada mitmes kohas. See vajab mõtlemist ja tähelepanu, sest võimalusi "ämbrisse astumiseks" on palju. GitHub teeb OAuth autentimisteenuse pakkujana head tööd. Neil on jooksmas algoritmid, mis jälgivad muuhulgas ka seda, et keegi turvavõtmeid ja -tõendeid GitHub-i avalikesse repodesse üles ei laadiks. Mina tegin selle vea ja sain kohe hoiatuskirja:
 
@@ -347,6 +347,8 @@ Kuvapildistus 7
 <img src='img/P6.PNG' width='500px' style='border: 1px solid Gray;'>
 
 ---
+
+Teise vea tegin sellega, et ei implementeerinud unikaalse identifikaatori (_state_) kontrolli. Rakenduse serveripoolne osa genereerib selle juhustringina päringu 2 vastuses. Autentimisteenus saadab turvakoodi edastades unikaalse identifikaatori serverile tagasi (päring 4). Server peab kontrollima, et sai tagasi sama koodi, mille välja saatis. See kontroll on vajalik võltsümbersuunamise turvaründe vastu. Vt nt [arutelu StackOverflow-s](https://security.stackexchange.com/questions/20187/oauth2-cross-site-request-forgery-and-state-parameter).
 
 ## Marsruutimisskeem (URL-de järjekord)
 
