@@ -38,33 +38,33 @@ Joonis 1
 {: .joonis}
 
 ```
-                                     ,+.
-                                     `|'
-                                     /|\
-                                      +
-                                     / \
-                                  Kasutaja
+                                ,+.
+                                `|'
+                                /|\
+                                 +
+                                / \
+                             Kasutaja
 
-                                 +--------------+
-                                 |              |
-                    (3)          | Veebisirvija |
-           +---------------------+      osa     |
-           |                     |              |
-           |                     |              |
-           |                     +----+---------+
-           |                          |
-           |           (1)  (2)  (4)  |    ^
-           |                          |    |
-           v                (6)  (8)  v    |
-                                           |                            O
-    +--------------+             +---------+----+               +---------------+
-    |              |             |              |               |               |
-    | GitHub OAuth |             |   Serveri    |               |   GitHub+i    |
-    | autentimis-  |O   <--------+     osa      +----------->  O|     repo      |
-    |   teenus     |             |              |               |               |
-    |              |    (5)      |   (Heroku)   |    (7) (9)    |               |
-    +--------------+             +--------------+               +---------------+
-github.com/login/oauth        samategev.herokuapp.com           api.github.com
+                            +------------+
+                            |            |
+               (3)          | Veebi-     |
+           +----------------+ sirvija    |
+           |                | osa        |
+           |                |            |
+           |                +----+-------+
+           |                     |
+           |      (1)  (2)  (4)  |    ^
+           |                     |    |
+           v           (6)  (8)  v    |
+                                      |
+    +------------+          +---------+--+         +------------+
+    |            |          |            |         |            |
+    |   GitHub   |          | Serveri    |         | GitHub-i   |
+    |    OAuth   |O<--------+   osa      +------->O|   repo     |
+    | autentimis-+          |            |         |            |
+    |   teenus   | (5)      | (Heroku)   | (7) (9) |            |
+    +------------+          +------------+         +------------+
+github.com/login/oauth   samategev.herokuapp.com   api.github.com
 ````
 
 ## Samm-sammuline läbikäik (walkthrough): autentimine
