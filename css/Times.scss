@@ -57,13 +57,20 @@ table, th, td { border: 1px solid black; }
 .s { font-size: 10pt; }
 
 /* TOC genereeritud */
+#markdown-toc { 
+  background-color: Azure;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid aquamarine; }
 #markdown-toc ul { list-style: none; margin: 0 !important;
     padding-left: 0 !important; }
 #markdown-toc ul > li:before { display: inline-block;
     content: none !important; width: 0 !important; margin-left: 0 !important; }
 #markdown-toc > li {
+  display: inline; 
   list-style: none;
   margin-bottom: 0.8rem;
+  margin-left: 1rem; 
 }
 
 /* Allkriipsutus */
