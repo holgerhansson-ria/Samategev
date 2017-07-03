@@ -27,10 +27,10 @@ Lähtekood: [https://github.com/PriitParmakson/Samategev](https://github.com/Pri
 ## Rakenduse arhitektuur
 
 Suhtlevaid komponente ja teenuseid on neli:
-- Veebirakenduse serveripoolne komponent (`https://samategev.herokuapp.com`)
-- Veebirakenduse sirvijasse laetav komponent
-- GitHub OAuth autentimisteenus
-- GitHub-i API.
+- Veebirakenduse serveripoolne osa (`https://samategev.herokuapp.com`)
+- Veebirakenduse sirvijasse laetav osa
+- GitHub OAuth autentimisteenus (`github.com/login/oauth`)
+- GitHub-i API (`api.github.com`).
 
 Kogu suhtlus toimub HTTPS protokolli järgi. Alloleval joonisel on numbritega näidatud edastatavad HTTP-päringud (nendest kohe allpool).
 
@@ -51,12 +51,12 @@ Joonis 1
            +----------------+ sirvija    |
            |                | osa        |
            |                |            |
-           |                +----+-------+
-           |                     |
-           |      (1)  (2)  (4)  |    ^
-           |                     |    |
-           v           (6)  (8)  v    |
-                                      |
+           |                +------+-----+
+           |                       |
+           |        (1)  (2)  (4)  |    
+           |                       |    
+           v             (6)  (8)  v    
+                                   O   
     +------------+          +---------+--+         +------------+
     |            |          |            |         |            |
     |   GitHub   |          | Serveri    |         | GitHub-i   |
