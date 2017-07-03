@@ -55,7 +55,7 @@ PÄRING 2
 
 Ümbersuunamis-URL-is on kuus OAuth autentimiseks vajalikku teabeelementi:
 
-- GitHub-i autentimisteenuse URL (`https://github.com/login/oauth/authorize`) veel;
+- GitHub-i autentimisteenuse URL (`https://github.com/login/oauth/authorize`);
 - tagasipöördumis-URL (`https://samategev.herokuapp.com/OAuthCallback`);
 - õigused, mida rakendus kasutajalt küsib (`scope` - `user` (kasutaja profiiliandmed) ja `public_repo` (kirjutusõigus kasutaja repodesse));
 - autentimise unikaalne identifikaator (server genereeris selle juhuslikult) `state`;
@@ -84,7 +84,7 @@ PÄRING 3
 
 `HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk`
 
-3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe.
+3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe ja ründaja protsessi ei saa vahele sekkuda.
 
 3b. Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile `https://github.com/login/oauth/access_token`.
 
