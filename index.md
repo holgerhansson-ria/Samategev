@@ -32,13 +32,12 @@ Suhtlevaid komponente ja teenuseid on neli:
 - GitHub OAuth autentimisteenus
 - GitHub-i API.
 
-Kogu suhtlus toimub HTTPS protokolli järgi.
+Kogu suhtlus toimub HTTPS protokolli järgi. Alloleval joonisel on numbritega näidatud edastatavad HTTP-päringud (nendest kohe allpool).
 
 Joonis 1
 {: .joonis}
 
 ```
-    ``
                                      ,+.
                                      `|'
                                      /|\

@@ -9,7 +9,7 @@ body {
   max-width: 50em; margin: 0 0; 
   padding: 1rem 1.5em 2em 2em; 
   line-height: 1.2;
-  font-family: 'Courier News', monospace; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
   color: #333;
   font-size: 12pt; 
   }
@@ -85,7 +85,8 @@ blockquote {
 /* Kood; asciiflow joonised */
 pre, code, samp {
   font-family: 'Anonymous Pro', monospace;
-  font-size: 16px; color: Red;
+  font-size: 16px; color: Gray;
+  background-color: antiquewhite;
   overflow-y: hidden; overflow-x: hidden;
   page-break-inside: avoid; hyphens: none;
   text-transform: none;
