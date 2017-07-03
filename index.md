@@ -2,13 +2,13 @@
 title: Samategev
 ---
 
-Rakendus: [https://samategev.herokuapp.com](https://samategev.herokuapp.com)
-
-Lähtekood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev)
-
 # OAuth demorakendus 
 {: .no_toc}
 
+- TOC
+{:toc}
+
+## Ülevaade
 Demorakenduse eesmärk on järgi proovida ja näitlikult kirjeldada mitme tehnoloogia kasutamine:
 
 1) `Node.js` kui veebirakenduse serveripoolse komponendi raamistik;
@@ -20,12 +20,11 @@ Rakendus:
 1) autendib kasutaja GitHub-i OAuth autentimisteenuse abil ja
 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
 
-Sisukord
+Rakendus: [https://samategev.herokuapp.com](https://samategev.herokuapp.com).
 
-- TOC
-{:toc}
+Lähtekood: [https://github.com/PriitParmakson/Samategev](https://github.com/PriitParmakson/Samategev).
 
-## Arhitektuur
+## Rakenduse arhitektuur
 
 Suhtlevaid komponente ja teenuseid on neli:
 - Veebirakenduse serveripoolne komponent (`https://samategev.herokuapp.com`)
@@ -39,6 +38,7 @@ Joonis 1
 {: .joonis}
 
 ```
+    ``
                                      ,+.
                                      `|'
                                      /|\
@@ -48,27 +48,27 @@ Joonis 1
 
                                  +--------------+
                                  |              |
-                                 | Veebisirvija |
-                                 |      osa     +-----------------------+
-                                 |              |                       |
-                                 |              |                       |
-                                 +----+---------+                       v
-                                      |
-                                      |    ^
-                                      |    |
-                                      v    |
+                    (3)          | Veebisirvija |
+           +---------------------+      osa     |
+           |                     |              |
+           |                     |              |
+           |                     +----+---------+
+           |                          |
+           |           (1)  (2)  (4)  |    ^
+           |                          |    |
+           v                (6)  (8)  v    |
                                            |                            O
     +--------------+             +---------+----+               +---------------+
     |              |             |              |               |               |
     | GitHub OAuth |             |   Serveri    |               |   GitHub+i    |
     | autentimis-  |O   <--------+     osa      +----------->  O|     repo      |
     |   teenus     |             |              |               |               |
-    |              |             |   (Heroku)   |               |               |
+    |              |    (5)      |   (Heroku)   |    (7) (9)    |               |
     +--------------+             +--------------+               +---------------+
 github.com/login/oauth        samategev.herokuapp.com           api.github.com
 ````
 
-## Samm-sammuline läbikäik (walkthrough)
+## Samm-sammuline läbikäik (walkthrough): autentimine
 
 Käime läbi OAuth autentimisprotseduuri. Näitlik on asi ise läbi teha, jälgides osapoolte vahelist sõnumiliiklust sirvija arendustööriista (Firefox-is Developer Tools võrguliikluse jälgimise tööriist, Chrome-is või Edge-s on samuti vastavad vahendid) abil.
 
@@ -76,19 +76,25 @@ Rakenduse URL on: `https://samategev.herokuapp.com`. Kasutaja läheb rakenduse a
 
 ***PÄRING 1***
 
-`HTTP GET https://samategev.herokuapp.com`
+```
+HTTP GET https://samategev.herokuapp.com
+```
 
 Rakenduse serveripoolne komponent saadab sirvijasse rakenduse avalehe.
 
 ***VASTUS 1***
 
-`200 OK <rakenduse avaleht>`
+```
+200 OK <rakenduse avaleht>
+```
 
 Avalehel esitatakse lühike teave rakenduse kohta ja ettepanek `Logi sisse GitHub-ga`. Kasutaja vajutab lingile `Logi sisse GitHub-ga`. Veebisirvijast läheb serverisse
 
 ***PÄRING 2***
 
-`HTTP GET https://samategev.herokuapp.com/auth`
+```
+HTTP GET https://samategev.herokuapp.com/auth
+```
 
 Server saadab päringule vastuseks ümbersuunamiskorralduse (_redirect_) GitHub-i OAuth autentimisteenusesse. HTTP vastuse staatusekood on `302`. Ümbersuunamiskorralduses saadab server veebisirvijale GitHubi autentimisteenuse URL-i `https://github.com/login/oauth/authorize` ja veel viis olulist teabeelementi (nendest kohe allpool).
 
@@ -103,7 +109,9 @@ Kasutaja veebisirvija saadab HTTP GET päringu ümbersuunamis-URL-le:
 
 ***PÄRING 3***
 
-`HTTP GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a`
+```
+HTTP GET https://github.com/login/oauth/authorize?redirect_uri=https://samategev.herokuapp.com/OAuthCallback&scope=user public_repo&state=OFfVLKu0kNbJ2EZk&response_type=code&client_id=ab5b4f1671a58e7ba35a
+```
 
 Ümbersuunamis-URL-is on kuus OAuth autentimiseks vajalikku teabeelementi:
 
@@ -132,13 +140,13 @@ Kuvapildistus 2
 {: .joonis}
 
 ---
-<img src='img/P2.PNG' width='300px' style='border: 1px solid Gray;'>
+<img src='img/P2.PNG' width='350px' style='border: 1px solid Gray;'>
 
 ---
 
 Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestada kasutaja GitHub-i konto parooli. Märkus. Kasutaja saab nõusoleku GitHub-is igal ajal tagasi võtta. Otselink: [https://github.com/settings/applications](https://github.com/settings/applications).
 
-4. Seejärel saadab GitHub-i autentimisteenus kasutaja veebisirvijale ümbersuunamiskorralduse, millega veebisirvija suunatakse tagasi rakendusse:
+Seejärel saadab GitHub-i autentimisteenus kasutaja veebisirvijale ümbersuunamiskorralduse, millega veebisirvija suunatakse tagasi rakendusse:
 
 ***PÄRING 4***
 
@@ -242,7 +250,7 @@ Kuvapildistus 3
 {: .joonis}
 
 ---
-<img src='img/P3.PNG' width='400px' style='border: 1px solid Gray;'>
+<img src='img/P3.PNG' width='450px' style='border: 1px solid Gray;'>
 
 ---
 
