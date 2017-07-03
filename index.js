@@ -1,6 +1,8 @@
 'use strict';
 
-/* Märkmed
+/* Node.js rakendus
+
+ Märkmed
 
  * Pärime skoobid 'user' ja 'public_repo'. Vt https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-scopes-for-oauth-apps/
 

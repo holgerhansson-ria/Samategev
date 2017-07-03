@@ -128,7 +128,11 @@ Kui kasutaja nõustub, siis palub GitHub-i autentimisteenus kinnituseks sisestad
 
 `HTTP GET https://samategev.herokuapp.com/OAuthCallback?code=71ed5797c3d957817d31&state=OFfVLKu0kNbJ2EZk`
 
+<<<<<<< HEAD
 Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (_authorization code_) (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe.
+=======
+3a. Ümbersuunamis-URL-is paneb GitHub-i autentimisteenus kaasa turvakoodi (`code=71ed5797c3d957817d31`) ja rakenduse saadetud unikaalse identifikaatori (`state=OFfVLKu0kNbJ2EZk`). Turvakood on ühekordne "lubatäht" OAuth juurdepääsutõendi (_access token_) saamiseks. Unikaalne identifikaator (`state`) aitab tagada, et erinevate kasutajate autentimised sassi ei lähe ja ründaja protsessi ei saa vahele sekkuda.
+>>>>>>> 12cd7a4a631518d36bbb7884e8021c1fc75588e6
 
 5. Server, saades selle päringu, teeb omakorda otsepäringu GitHub-i autentimisteenusesse, aadressile `https://github.com/login/oauth/access_token`.
 
