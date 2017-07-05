@@ -16,6 +16,11 @@ Demorakenduse eesmärk on järgi proovida ja näitlikult kirjeldada mitme tehnol
 3) `OAuth 2.0` kui autentimisraamistik;
 4) `GitHub` kui salvestuslahendus.
 
+<img src='img/NodeJS.PNG' style='width: 7rem;'>
+<img src='img/Heroku.PNG'>
+<img src='img/oauth-2-sm.png' style='width: 4rem;'>
+<img src='img/GitHub.PNG' style='width: 4rem;'>
+
 Rakendus:
 1) autendib kasutaja GitHub-i OAuth autentimisteenuse abil ja
 2) salvestab kasutaja sisestatud teksti kasutaja GitHub-i reposse, eraldi failina.
@@ -27,10 +32,10 @@ Lähtekood: [https://github.com/PriitParmakson/Samategev](https://github.com/Pri
 ## Rakenduse arhitektuur
 
 Suhtlevaid komponente ja teenuseid on neli:
-- Veebirakenduse serveripoolne komponent (`https://samategev.herokuapp.com`)
-- Veebirakenduse sirvijasse laetav komponent
-- GitHub OAuth autentimisteenus
-- GitHub-i API.
+- Veebirakenduse serveripoolne osa (`https://samategev.herokuapp.com`)
+- Veebirakenduse sirvijasse laetav osa
+- GitHub OAuth autentimisteenus (`github.com/login/oauth`)
+- GitHub-i API (`api.github.com`).
 
 Kogu suhtlus toimub HTTPS protokolli järgi. Alloleval joonisel on numbritega näidatud edastatavad HTTP-päringud (nendest kohe allpool).
 
@@ -38,33 +43,33 @@ Joonis 1
 {: .joonis}
 
 ```
-                                     ,+.
-                                     `|'
-                                     /|\
-                                      +
-                                     / \
-                                  Kasutaja
+                                ,+.
+                                `|'
+                                /|\
+                                 +
+                                / \
+                             Kasutaja
 
-                                 +--------------+
-                                 |              |
-                    (3)          | Veebisirvija |
-           +---------------------+      osa     |
-           |                     |              |
-           |                     |              |
-           |                     +----+---------+
-           |                          |
-           |           (1)  (2)  (4)  |    ^
-           |                          |    |
-           v                (6)  (8)  v    |
-                                           |                            O
-    +--------------+             +---------+----+               +---------------+
-    |              |             |              |               |               |
-    | GitHub OAuth |             |   Serveri    |               |   GitHub+i    |
-    | autentimis-  |O   <--------+     osa      +----------->  O|     repo      |
-    |   teenus     |             |              |               |               |
-    |              |    (5)      |   (Heroku)   |    (7) (9)    |               |
-    +--------------+             +--------------+               +---------------+
-github.com/login/oauth        samategev.herokuapp.com           api.github.com
+                            +------------+
+                            |            |
+               (3)          | Veebi-     |
+           +----------------+ sirvija    |
+           |                | osa        |
+           |                |            |
+           |                +------+-----+
+           |                       |
+           |        (1)  (2)  (4)  |    
+           |                       |    
+           v             (6)  (8)  v    
+                                   O   
+    +------------+          +---------+--+         +------------+
+    |            |          |            |         |            |
+    |   GitHub   |          | Serveri    |         | GitHub-i   |
+    |    OAuth   |O<--------+   osa      +------->O|   repo     |
+    | autentimis-+          |            |         |            |
+    |   teenus   | (5)      | (Heroku)   | (7) (9) |            |
+    +------------+          +------------+         +------------+
+github.com/login/oauth   samategev.herokuapp.com   api.github.com
 ````
 
 ## Samm-sammuline läbikäik (walkthrough): autentimine
@@ -133,7 +138,6 @@ response_type=code&client_id=ab5b4f1671a58e7ba35a
 Kuvapildistus 1
 {: .joonis}
 
----
 <img src='img/P1.PNG' width='80%' style='border: 1px solid Gray;'>
 
 ---
@@ -145,7 +149,6 @@ GitHub-i autentimisteenus kuvab kasutajale õiguste andmise dialoogi.
 Kuvapildistus 2
 {: .joonis}
 
----
 <img src='img/P2.PNG' width='350px' style='border: 1px solid Gray;'>
 
 ---
@@ -264,7 +267,6 @@ Server lisab saadud nime kasutajale päringu 5 vastuseks tagastatavasse HTML-tek
 Kuvapildistus 3
 {: .joonis}
 
----
 <img src='img/P3.PNG' width='450px' style='border: 1px solid Gray;'>
 
 ---
@@ -278,7 +280,6 @@ Autenditud kasutaja saab nüüd sisestada failinime ja teksti.
 Kuvapildistus 4
 {: .joonis}
 
----
 <img src='img/P4.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
@@ -323,7 +324,6 @@ GitHub-i API salvestab faili.
 Kuvapildistus 5
 {: .joonis}
 
----
 <img src='img/P5.PNG' width='400px' style='border: 1px solid Gray;'>
 
 ---
@@ -333,22 +333,22 @@ Kui midagi läheb untsu, siis annab programm intelligentselt veateate. Näiteks,
 Kuvapildistus 6
 {: .joonis}
 
----
 <img src='img/P7.PNG' width='300px' style='border: 1px solid Gray;'>
 
 ---
 
-## Ohud
+## Ämbrisse astumised
 
 OAuth on selles mõttes hea protokoll, et turvariskide kohta on kohe omaette dokument: [OAuth 2.0 Threat Model and Security Considerations](https://tools.ietf.org/html/rfc6819). Kahjuks ei piisa dokumendi läbilugemisest - ja ega esimese lugemisega palju aru saagi. Turvameetmeid tuleb rakendada mitmes kohas. See vajab mõtlemist ja tähelepanu, sest võimalusi "ämbrisse astumiseks" on palju. GitHub teeb OAuth autentimisteenuse pakkujana head tööd. Neil on jooksmas algoritmid, mis jälgivad muuhulgas ka seda, et keegi turvavõtmeid ja -tõendeid GitHub-i avalikesse repodesse üles ei laadiks. Mina tegin selle vea ja sain kohe hoiatuskirja:
 
----
 Kuvapildistus 7
 {: .joonis}
 
 <img src='img/P6.PNG' width='500px' style='border: 1px solid Gray;'>
 
 ---
+
+Teise vea tegin sellega, et ei implementeerinud unikaalse identifikaatori (_state_) kontrolli. Rakenduse serveripoolne osa genereerib selle juhustringina päringu 2 vastuses. Autentimisteenus saadab turvakoodi edastades unikaalse identifikaatori serverile tagasi (päring 4). Server peab kontrollima, et sai tagasi sama koodi, mille välja saatis. See kontroll on vajalik võltsümbersuunamise turvaründe vastu. Vt nt [arutelu StackOverflow-s](https://security.stackexchange.com/questions/20187/oauth2-cross-site-request-forgery-and-state-parameter).
 
 ## Marsruutimisskeem (URL-de järjekord)
 

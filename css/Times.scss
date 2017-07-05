@@ -8,32 +8,19 @@ $bluegrey100: #CFD8DC;
 body {
   max-width: 50em; margin: 0 0; 
   padding: 1rem 1.5em 2em 2em; 
-  line-height: 1.2;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+  line-height: 1.5;
+  font-family: 'Libre Baskerville', serif;
   color: #333;
   font-size: 12pt; 
   }
 
 /* ---- Paigutus ---- */
-#Container { display: flex; max-width: 40em; }
-
-#Avatekst {
-  flex-grow: 1; margin-left: 2rem;
-  max-width: 53rem; /* Teksti loetavuse huvides */
-}
-
-#Tekst { max-width: 35rem; 
-}
-
-/* Statistikariba */
-.statistika { font-family: 'Roboto', sans-serif;
-  font-size: 13pt; margin-bottom: 8px; }
+#Container { display: flex; }
 
 /* Jaotisepealkiri */
-h1 { font-size: 130%;
+h1 { font-size: 140%;
   line-height: 1.2;
   font-weight: bold;
-  font-family: 'Roboto', sans-serif; 
   margin-top: 2rem;
   margin-bottom: 1.5rem; }
 
@@ -59,17 +46,24 @@ table { table-layout: fixed;
 table { border-collapse: collapse; }
 table, th, td { border: 1px solid black; }
 
-.ei, .jah { text-align: center; }
-.ei { color: White; background-color: #D1F3D1; } /* Doodle */
-.jah { background-color: #FFCCCA; } /* Doodle */
-
 /* Tekst */
-.disabled { color:#000000; opacity:0.38; }
 .s { font-size: 10pt; }
 
 /* TOC genereeritud */
+#markdown-toc { 
+  background-color: Azure;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid aquamarine; }
+#markdown-toc ul { list-style: none; margin: 0 !important;
+    padding-left: 0 !important; }
+#markdown-toc ul > li:before { display: inline-block;
+    content: none !important; width: 0 !important; margin-left: 0 !important; }
 #markdown-toc > li {
+  display: inline; 
   list-style: none;
+  margin-bottom: 0.8rem;
+  margin-left: 1rem; 
 }
 
 /* Allkriipsutus */
@@ -78,16 +72,16 @@ table, th, td { border: 1px solid black; }
 /* Plokktsitaat */
 blockquote { 
   font-style: italic; 
-  font-family: 'Anonymous Pro', monospace;
-  font-size: 16px;
+  font-family: 'Cutive Mono', monospace;
+  font-size: 13pt;
   margin-left: 0;
 }
 
 /* Kood; asciiflow joonised */
 pre, code, samp {
-  font-family: 'Anonymous Pro', monospace;
-  font-size: 16px; color: Gray;
-  background-color: antiquewhite;
+  font-family: 'Cutive Mono', monospace;
+  font-size: 13pt; color: Gray;
+  background-color: honeydew;
   overflow-y: hidden; overflow-x: hidden;
   page-break-inside: avoid; hyphens: none;
   text-transform: none;
@@ -102,35 +96,8 @@ pre { margin-top: 1em; margin-bottom: 1em; }
 a[href] {
   color: $mutedblue;
   text-decoration: none;
-  border-bottom: 1px solid $mutedblue;
-  padding: 0 1px 0;
-  margin: 0 -1px 0;
+  border-bottom: 1px dotted $mutedblue;
 }
-a:visited {
-  border-bottom-color: $mutedblue;
-}
-
-a[href]:focus,
-a[href]:hover {
-  background: $mutedblue;
-  background: rgba(75%, 75%, 75%, .25);
-  border-bottom-width: 3px;
-  margin-bottom: -2px;
-}
-a[href]:active {
-  color: #C00;
-  border-color: #C00;
-}
-
-/* ======== Paneelid ======== */
-.action, .note, .teade { border-radius: 8px; padding: 10px; }
-
-/* Tegevus */
-.action { border: 1px solid $bluegrey100; 
-  background-color: $bluegrey100; 
-}
-/* Märkus */
-.note { border: 1px solid Aquamarine; background-color: Azure; }
 
 /* Joon */
 hr { color: gray; }
@@ -138,6 +105,5 @@ hr { color: gray; }
 /* Joonis */
 .joonis { color: gray;
   border-top: 1px solid gray;
-  font-family: 'Roboto';
   letter-spacing: 0.2pt;
   font-size: 8pt; }
