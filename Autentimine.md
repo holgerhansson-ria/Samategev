@@ -3,6 +3,40 @@ title: Autentimine
 permalink: Autentimine
 ---
 
+---
+title: Päringute liigitus
+permalink: Paringud
+---
+
+# Päringute liigitus
+
+Asjast aru saamiseks tuleks küsida:
+
+***Frontend või backend?***
+- Veebirakendus koosneb kahest osast: sirvija osa ja serveri osa.
+
+***Samasse või teise allikasse?***
+
+***lehelaadimise või AJAX-päring?***
+
+***Andmeid päriv või salvestav päring?***
+- GET ja POST
+
+***lehe laadimine samast või teisest allikast?***
+
+***Sirvija päring lehe laadimisel või Javascripti päring?***
+
+***Ümbersuunamine?***
+
+***Millised küpsised lisatakse päringule, nende tähendus?***
+
+***Milline on päringu URL-i struktuur? Mida URL-i osad tähendavad?***
+
+***Millised päised lisatakse päringule? Nende tähendus?***
+
+***Mis edastatakse päringu kehas?***
+
+
 
 # Autentimine veebirakendustes
 
