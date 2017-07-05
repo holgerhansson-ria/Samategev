@@ -11,20 +11,6 @@ seletussõnastik
 ## arendusstiilid
 “rich clients, a RESTful backend and communication via JSON”
 
-## Content Security Policy, CSP
-  - keelelised vahendid sisu töötlemise piiramiseks turvaeesmärkidel
-  - https://www.w3.org/TR/CSP/ 
-  - CSP Cheat Sheet https://scotthelme.co.uk/csp-cheat-sheet/ 
- 
-## päringuvõltsimine, Cross-Site Request Forgery, CSRF
-  - “CSRF rely on the fact that your browser automatically adds cookies to HTTP requests if it has cookies associated with the target domain and path. That includes session cookies.” http://appsandsecurity.blogspot.com.ee/2012/01/stateless-csrf-protection.html 
-  oht ainult GET päringutes? Ei
-  CSRF hea kirjeldus (2008) “There are three widely used techniques for defending against CSRF attacks: validating a secret request token, validating the HTTP Referer header, and validating custom headers attached to XMLHttpRequests.” - http://www.adambarth.com/papers/2008/barth-jackson-mitchell-b.pdf 
-  https://stackoverflow.com/questions/2392100/how-to-prevent-csrf-in-a-restful-application 
-  CSRF Protection With Double Submit - sama küpsis tuleb esitada nii küpsisena kui ka eraldi päises. Ründaja ei saa küpsist enne saatmist lugeda. CSRF küpsisena ei tohiks kasutada sessiooniküpsist, sest CSRF küpsis ei saa olla Http Only (lehe Javascript peab suutma seda lugeda). See aga toob kaasa sessiooni ülevõtmise (session hijacking) ohu (murdskriptimise teel). Peaks olema eraldi CSRF küpsis. Kahekordse esituse küpsise saab genereerida kliendi poolel, ei pea serveris.  http://appsandsecurity.blogspot.com.ee/2012/01/stateless-csrf-protection.html 
-  OWASP CSRF Cheat Sheet, vt jaotis Double Submit Cookie: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#Double_Submit_Cookies 
-  ka AJAX-vastuses saab seada küpsise; CSRF-küpsise pärimine enne iga pöördumist REST API poole? Piisab ühest!?
- 
 ## custom header-i lisamine AJAX-päringus
   https://stackoverflow.com/questions/7686827/how-can-i-add-a-custom-http-header-to-ajax-request-with-js-or-jquery (“CORS has different requirements and beyond a few (very basic) headers, any additional will have to be whitelisted via the Access-Control-Request-Headers header.”)
 
@@ -188,6 +174,20 @@ Selleks, et kredentsiaale `Authorization` päises saata, peab sirvijarakendus ol
   3. Exfiltration Capability: attacker-harvested data must be delivered to another domain or resource for further analysis and exploitation.” - https://www.hgi.rub.de/media/emma/veroeffentlichungen/2012/08/16/scriptlessAttacks-ccs2012.pdf 
   “server- and client-side XSS filters try to remove scripts from the injected content, or, they try to modify/replace these scripts in a way that they are not executed in the browser’s DOM”
   http://appsandsecurity.blogspot.com.ee/2012/11/is-xss-solved.html 
+ 
+## päringuvõltsimine, Cross-Site Request Forgery, CSRF
+  - “CSRF rely on the fact that your browser automatically adds cookies to HTTP requests if it has cookies associated with the target domain and path. That includes session cookies.” http://appsandsecurity.blogspot.com.ee/2012/01/stateless-csrf-protection.html 
+  oht ainult GET päringutes? Ei
+  CSRF hea kirjeldus (2008) “There are three widely used techniques for defending against CSRF attacks: validating a secret request token, validating the HTTP Referer header, and validating custom headers attached to XMLHttpRequests.” - http://www.adambarth.com/papers/2008/barth-jackson-mitchell-b.pdf 
+  https://stackoverflow.com/questions/2392100/how-to-prevent-csrf-in-a-restful-application 
+  CSRF Protection With Double Submit - sama küpsis tuleb esitada nii küpsisena kui ka eraldi päises. Ründaja ei saa küpsist enne saatmist lugeda. CSRF küpsisena ei tohiks kasutada sessiooniküpsist, sest CSRF küpsis ei saa olla Http Only (lehe Javascript peab suutma seda lugeda). See aga toob kaasa sessiooni ülevõtmise (session hijacking) ohu (murdskriptimise teel). Peaks olema eraldi CSRF küpsis. Kahekordse esituse küpsise saab genereerida kliendi poolel, ei pea serveris.  http://appsandsecurity.blogspot.com.ee/2012/01/stateless-csrf-protection.html 
+  OWASP CSRF Cheat Sheet, vt jaotis Double Submit Cookie: https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)_Prevention_Cheat_Sheet#Double_Submit_Cookies 
+  ka AJAX-vastuses saab seada küpsise; CSRF-küpsise pärimine enne iga pöördumist REST API poole? Piisab ühest!?
+ 
+## sisu turbepoliitika, Content Security Policy, CSP
+  - keelelised vahendid sisu töötlemise piiramiseks turvaeesmärkidel
+  - https://www.w3.org/TR/CSP/ 
+  - CSP Cheat Sheet https://scotthelme.co.uk/csp-cheat-sheet/ 
  
 ## sirvimiskontekst, browsing context
   keskkond, kus sirvija kuvab dokumenti - harilikult sakk (_tab_), aga võib olla ka aken (_window_) või lehel olevat freimi (_frame_).
