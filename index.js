@@ -80,6 +80,9 @@ app.get('/auth', (req, res) => {
 // Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
 app.get('/Callback', (req, res) => {
   const code = req.query.code;
+  console.log('volituskood: ', code);
+  const returnedState = req.query.state;
+  console.log('tagastatud state: ', state);
   var options = {
     url: 'https://tara-test.ria.ee/oidc/accessToken',
     method: 'POST',
@@ -98,6 +101,7 @@ app.get('/Callback', (req, res) => {
     function (error, response, body) {
       if (error) {
         console.log('Viga identsustõendi pärimisel: ', error);
+        return;
       }
       if (response) {
         console.log('Identsustõendi pärimine - statusCode: ', response.statusCode);
