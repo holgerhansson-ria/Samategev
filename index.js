@@ -21,6 +21,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const simpleOauthModule = require('simple-oauth2');
 const uid = require('rand-token').uid;
+const qs = require('query-string');
+// https://www.npmjs.com/package/query-string 
 const requestModule = require('request');
 
 /* 2 Objektide loomine ja konfigureerimine 
@@ -53,23 +55,26 @@ const oauth2 = simpleOauthModule.create({
   },
 });
 
-// Generate a 16 character alpha-numeric token:
-var token = uid(16);
-
 // Authorization uri definition
-const authorizationUri = oauth2.authorizationCode.authorizeURL({
+/* const authorizationUri = oauth2.authorizationCode.authorizeURL({
   redirect_uri: 'https://samategev.herokuapp.com/Callback',
   scope: 'openid',
   state: token,
-});
-
-/* 3 Marsruutimine
-   -------------------------------------------
-*/
+}); */
 
 // Autentimispäringu saatmine
 app.get('/auth', (req, res) => {
-  res.redirect(authorizationUri);
+  // Generate a 16 character alpha-numeric token:
+  var token = uid(16);
+  var u = 'https://tara-test.ria.ee?' + qs.stringify({
+    redirect_uri: 'https://samategev.herokuapp.com/Callback',
+    scope: 'openid',
+    state: token,
+    response_type: 'code',
+    client_id: 'ParmaksonResearch'
+  });
+  console.log('autentimispäring: ', u);
+  res.redirect(u);
 });
 
 // Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
@@ -226,7 +231,7 @@ app.get('/', function (request, response) {
 
 // Veebiserveri käivitamine
 app.listen(app.get('port'), function () {
-  console.log('Node rakendus töötab, port', app.get('port'));
+  console.log('---- Node rakendus töötab ----');
 });
 
 
