@@ -1,7 +1,7 @@
 {
-  "name": "node-js-getting-started",
+  "name": "Samategev",
   "version": "0.2.5",
-  "description": "A sample Node.js app using Express 4",
+  "description": "TARA autentimisteenuse kasutamise praktiline näide",
   "engines": {
     "node": "5.9.1"
   },
@@ -10,22 +10,20 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "body-parser": "^1.17.2",
+    "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
-    "ejs": "2.4.1",
-    "express": "4.13.3",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
     "rand-token": "^0.3.0",
-    "request": "^2.81.0",
-    "simple-oauth2": "^1.2.0"
+    "request": "^2.83.0",
+    "simple-oauth2": "^1.3.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/PriitParmakson/Samategev"
   },
   "keywords": [
-    "node",
-    "heroku",
-    "express"
+    "node"
   ],
   "license": "MIT"
 }

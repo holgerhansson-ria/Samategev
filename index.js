@@ -38,16 +38,18 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+var client_secret = process.env.CLIENT_SECRET;
+
 // OAuth ülesseadmine
 const oauth2 = simpleOauthModule.create({
   client: {
-    id: 'ab5b4f1671a58e7ba35a',
-    secret: process.env.SECRET,
+    id: 'ParmaksonResearch',
+    secret: client_secret,
   },
   auth: {
-    tokenHost: 'https://github.com',
-    tokenPath: '/login/oauth/access_token',
-    authorizePath: '/login/oauth/authorize',
+    tokenHost: 'https://tara-test.ria.ee',
+    tokenPath: '/oidc/accessToken',
+    authorizePath: '/oidc/authorize',
   },
 });
 
@@ -56,8 +58,8 @@ var token = uid(16);
 
 // Authorization uri definition
 const authorizationUri = oauth2.authorizationCode.authorizeURL({
-  redirect_uri: 'https://samategev.herokuapp.com/OAuthCallback',
-  scope: 'user public_repo',
+  redirect_uri: 'https://samategev.herokuapp.com/Callback',
+  scope: 'openid',
   state: token,
 });
 
@@ -65,27 +67,28 @@ const authorizationUri = oauth2.authorizationCode.authorizeURL({
    -------------------------------------------
 */
 
-// Suunamine rakendusele õigust andma (Githubis)
+// Autentimispäringu saatmine
 app.get('/auth', (req, res) => {
   res.redirect(authorizationUri);
 });
 
-// Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib juurdepääsutõendi
-app.get('/OAuthCallback', (req, res) => {
+// Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
+app.get('/Callback', (req, res) => {
   const code = req.query.code;
   const options = {
     code,
   };
+  console.log('Saadud volituskood: ', code);
   oauth2.authorizationCode.getToken(options, (error, result) => {
     if (error) {
       console.error('Viga juurdepääsutõendi pärimisel', error.message);
       return res.json('Autentimine ebaõnnestus');
     }
-    console.log('Saadud Github-st juurdepääsutõend: ', result);
+    console.log('Saadud TARA-teenusest juurdepääsutõend: ', result);
     // Selgitada, milleks järgnev kasulik on
-    const token = oauth2.accessToken.create(result);
+    //const token = oauth2.accessToken.create(result);
     // Juurdepääsutõendi saatmine küpsisesse panekuks - ettevalmistus
-    res.cookie('GHtoend', JSON.stringify(token));
+    // res.cookie('GHtoend', JSON.stringify(token));
     res.redirect('/autenditud');
   });
 });
