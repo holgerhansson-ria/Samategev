@@ -66,7 +66,7 @@ const oauth2 = simpleOauthModule.create({
 app.get('/auth', (req, res) => {
   // Generate a 16 character alpha-numeric token:
   var token = uid(16);
-  var u = 'https://tara-test.ria.ee?' + qs.stringify({
+  var u = 'https://tara-test.ria.ee/oidc/authorize?' + qs.stringify({
     redirect_uri: 'https://samategev.herokuapp.com/Callback',
     scope: 'openid',
     state: token,
