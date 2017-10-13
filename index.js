@@ -38,13 +38,13 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-var client_secret = process.env.CLIENT_SECRET;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 // OAuth ülesseadmine
 const oauth2 = simpleOauthModule.create({
   client: {
     id: 'ParmaksonResearch',
-    secret: client_secret,
+    secret: CLIENT_SECRET,
   },
   auth: {
     tokenHost: 'https://tara-test.ria.ee',
@@ -75,10 +75,35 @@ app.get('/auth', (req, res) => {
 // Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
 app.get('/Callback', (req, res) => {
   const code = req.query.code;
-  const options = {
-    code,
+  var options = {
+    url: 'https://tara-test.ria.ee/oidc/accessToken',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',      'Authorization': 'Basic ' + CLIENT_SECRET
+    },
+    form: {
+      'grant_type': 'authorization_code',
+      'code': code,
+      'redirect_uri': 'https://samategev.herokuapp.com/Callback',
+      'client_id': 'ParmaksonResearch'
+    }
   };
-  console.log('Saadud volituskood: ', code);
+  requestModule(
+    options,
+    function (error, response, body) {
+      if (error) {
+        console.log('Viga identsustõendi pärimisel: ', error);
+      }
+      if (response) {
+        console.log('Identsustõendi pärimine - statusCode: ', response.statusCode);
+      }
+      var saadudAndmed = JSON.parse(body);
+      console.log('Saadud identsustõend: ', saadudAndmed.id_token);
+      // res.status(200)
+      //  .render('pages/autenditud', { kasutaja: saadudAndmed.login });
+    });
+  
+  /*
   oauth2.authorizationCode.getToken(options, (error, result) => {
     if (error) {
       console.error('Viga juurdepääsutõendi pärimisel', error.message);
@@ -91,6 +116,7 @@ app.get('/Callback', (req, res) => {
     // res.cookie('GHtoend', JSON.stringify(token));
     res.redirect('/autenditud');
   });
+  */
 });
 
 function accessTokenFromCookies(req) {
