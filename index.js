@@ -10,6 +10,7 @@ const requestModule = require('request');
 require('request-debug')(requestModule);
 
 // Veebiserveri ettevalmistamine
+// https://expressjs.com/en/4x/api.html#app 
 const app = express();
 app.use(cookieParser());
 app.set('port', (process.env.PORT || 5000));
@@ -21,6 +22,11 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+// Esilehe kuvamine
+app.get('/', function (req, res) {
+  res.render('pages/index');
+});
 
 // Autentimispäringu saatmine
 app.get('/auth', (req, res) => {
@@ -77,6 +83,7 @@ app.get('/Callback', (req, res) => {
     function (error, response, body) {
       if (error) {
         console.log('Viga identsustõendi pärimisel: ', error);
+        res.render(JSON.stringify(error));
         return;
       }
       if (response) {
@@ -104,13 +111,15 @@ app.get('/Callback', (req, res) => {
   */
 });
 
+/*
 function accessTokenFromCookies(req) {
-  /* Juurdepääsutõendi väljavõtmine päringuga saadetud küpsisest */
+  // Juurdepääsutõendi väljavõtmine päringuga saadetud küpsisest
   const GHtoend = req.cookies.GHtoend;
   const access_token = JSON.parse(GHtoend).token.access_token;
   console.log('Päringuga kaasas juurdepääsutõend: ' + access_token);
   return access_token;
 }
+*/
 
 /* Tuleb esimest korda küpsisest kaasapandud juurdepääsutõendiga */
 app.get('/autenditud', (req, res) => {
@@ -198,11 +207,6 @@ app.post('/salvesta', (req, res) => {
 // Selgitada, mida see teeb
 app.get('/success', (req, res) => {
   res.send('');
-});
-
-// Esilehe kuvamine
-app.get('/', function (request, response) {
-  response.render('pages/index');
 });
 
 /* 4 Käimatõmbamine
