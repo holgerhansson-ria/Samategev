@@ -15,7 +15,11 @@ const app = express();
 app.use(cookieParser());
 app.set('port', (process.env.PORT || 5000));
 app.use(express.static(__dirname + '/public'));
+// root directory from which to serve static assets
+// http://expressjs.com/en/starter/static-files.html 
+// https://expressjs.com/en/4x/api.html#express.static
 app.set('views', __dirname + '/views');
+// a directory for application's views
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json()); // for parsing application/json
