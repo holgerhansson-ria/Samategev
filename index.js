@@ -1,34 +1,13 @@
 'use strict';
 
-/* Node.js rakendus
-
- Märkmed
-
- * Pärime skoobid 'user' ja 'public_repo'. Vt https://developer.github.com/apps/building-integrations/setting-up-and-registering-oauth-apps/about-scopes-for-oauth-apps/
-
- */
-
-/* 0 Abifunktsioonid
-   ------------------------------------------
-*/
-
-/* 1 Sõltuvuste importimine
-   ------------------------------------------
-*/
-
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const simpleOauthModule = require('simple-oauth2');
 const uid = require('rand-token').uid;
 const qs = require('query-string');
 // https://www.npmjs.com/package/query-string 
 const requestModule = require('request');
 require('request-debug')(requestModule);
-
-/* 2 Objektide loomine ja konfigureerimine 
-   -----------------------------------------
-*/
 
 // Veebiserveri ettevalmistamine
 const app = express();
@@ -42,26 +21,6 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-
-// OAuth ülesseadmine
-const oauth2 = simpleOauthModule.create({
-  client: {
-    id: 'ParmaksonResearch',
-    secret: CLIENT_SECRET,
-  },
-  auth: {
-    tokenHost: 'https://tara-test.ria.ee',
-    tokenPath: '/oidc/accessToken',
-    authorizePath: '/oidc/authorize',
-  },
-});
-
-// Authorization uri definition
-/* const authorizationUri = oauth2.authorizationCode.authorizeURL({
-  redirect_uri: 'https://samategev.herokuapp.com/Callback',
-  scope: 'openid',
-  state: token,
-}); */
 
 // Autentimispäringu saatmine
 app.get('/auth', (req, res) => {
@@ -78,6 +37,22 @@ app.get('/auth', (req, res) => {
   res.redirect(u);
 });
 
+app.get('/Proov', (req, res) => {
+  console.log('*** Proovi algus ***');
+  requestModule({
+    url: 'https://raw.githubusercontent.com/e-gov/RIHA-Browser/master/backend/src/main/resources/infosystem_schema.json',
+    method: 'GET'
+  },
+    (error, response, body) => {
+      if (error) {
+        console.log('Viga: ', error);
+      }
+      if (response) {
+        console.log('Staatus: ', response.statusCode);
+      }
+  });
+});
+
 // Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
 app.get('/Callback', (req, res) => {
   const code = req.query.code;
@@ -85,7 +60,7 @@ app.get('/Callback', (req, res) => {
   const returnedState = req.query.state;
   console.log('tagastatud state: ', returnedState);
   var options = {
-    url: 'https://tara-test.ria.ee/oidc/token',
+    url: 'https://tara-test.ria.ee/oidc/accessToken',
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',      'Authorization': 'Basic ' + CLIENT_SECRET
