@@ -91,8 +91,7 @@ app.get('/Callback', (req, res) => {
       }
       var saadudAndmed = JSON.parse(body);
       console.log('Saadud identsustõend: ', saadudAndmed.id_token);
-      // res.status(200)
-      //  .render('pages/autenditud', { kasutaja: saadudAndmed.login });
+      res.render(saadudAndmed.id_token);
     });
   
   /*
