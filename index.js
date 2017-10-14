@@ -24,6 +24,7 @@ const uid = require('rand-token').uid;
 const qs = require('query-string');
 // https://www.npmjs.com/package/query-string 
 const requestModule = require('request');
+require('request-debug')(requestModule);
 
 /* 2 Objektide loomine ja konfigureerimine 
    -----------------------------------------
@@ -82,7 +83,7 @@ app.get('/Callback', (req, res) => {
   const code = req.query.code;
   console.log('volituskood: ', code);
   const returnedState = req.query.state;
-  console.log('tagastatud state: ', state);
+  console.log('tagastatud state: ', returnedState);
   var options = {
     url: 'https://tara-test.ria.ee/oidc/accessToken',
     method: 'POST',
