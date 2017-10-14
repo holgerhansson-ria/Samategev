@@ -86,7 +86,7 @@ app.get('/Callback', (req, res) => {
   console.log('tagastatud state: ', returnedState);
   var options = {
     url: 'https://tara-test.ria.ee/oidc/accessToken',
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',      'Authorization': 'Basic ' + CLIENT_SECRET
     },
