@@ -47,28 +47,14 @@ app.get('/auth', (req, res) => {
   res.redirect(u);
 });
 
-app.get('/Proov', (req, res) => {
-  console.log('*** Proovi algus ***');
-  requestModule({
-    url: 'https://raw.githubusercontent.com/e-gov/RIHA-Browser/master/backend/src/main/resources/infosystem_schema.json',
-    method: 'GET'
-  },
-    (error, response, body) => {
-      if (error) {
-        console.log('Viga: ', error);
-      }
-      if (response) {
-        console.log('Staatus: ', response.statusCode);
-      }
-  });
-});
-
 // Tagasipöördumispunkt, parsib autoriseerimiskoodi ja pärib identsustõendi
 app.get('/Callback', (req, res) => {
   const code = req.query.code;
   console.log('volituskood: ', code);
   const returnedState = req.query.state;
   console.log('tagastatud state: ', returnedState);
+ 
+  // request mooduli kasutamisega
   var options = {
     url: 'https://tara-test.ria.ee/oidc/accessToken',
     method: 'POST',
@@ -87,7 +73,7 @@ app.get('/Callback', (req, res) => {
     function (error, response, body) {
       if (error) {
         console.log('Viga identsustõendi pärimisel: ', error);
-        res.render(JSON.stringify(error));
+        res.send(JSON.stringify(error));
         return;
       }
       if (response) {
@@ -95,126 +81,10 @@ app.get('/Callback', (req, res) => {
       }
       var saadudAndmed = JSON.parse(body);
       console.log('Saadud identsustõend: ', saadudAndmed.id_token);
-      res.render(saadudAndmed.id_token);
+      res.send(saadudAndmed.id_token);
     });
   
-  /*
-  oauth2.authorizationCode.getToken(options, (error, result) => {
-    if (error) {
-      console.error('Viga juurdepääsutõendi pärimisel', error.message);
-      return res.json('Autentimine ebaõnnestus');
-    }
-    console.log('Saadud TARA-teenusest juurdepääsutõend: ', result);
-    // Selgitada, milleks järgnev kasulik on
-    //const token = oauth2.accessToken.create(result);
-    // Juurdepääsutõendi saatmine küpsisesse panekuks - ettevalmistus
-    // res.cookie('GHtoend', JSON.stringify(token));
-    res.redirect('/autenditud');
-  });
-  */
 });
-
-/*
-function accessTokenFromCookies(req) {
-  // Juurdepääsutõendi väljavõtmine päringuga saadetud küpsisest
-  const GHtoend = req.cookies.GHtoend;
-  const access_token = JSON.parse(GHtoend).token.access_token;
-  console.log('Päringuga kaasas juurdepääsutõend: ' + access_token);
-  return access_token;
-}
-*/
-
-/* Tuleb esimest korda küpsisest kaasapandud juurdepääsutõendiga */
-app.get('/autenditud', (req, res) => {
-  const access_token = accessTokenFromCookies(req);
-  /* Pärime kasutaja nime Github-st Vt. https://developer.github.com/v3/users/#get-the-authenticated-user
-  */
-  const GithubAPIURL = 'https://api.github.com/';
-  var options = {
-    url: GithubAPIURL + 'user',
-    headers: {
-      'User-Agent': 'Samategev',
-      'Authorization': 'token ' + access_token
-    }
-  };
-  requestModule(
-    options,
-    function (error, response, body) {
-      if (error) {
-        console.log('Viga kasutaja andmete pärimisel Github-st: ', error);
-      }
-      if (response) {
-        console.log('Kasutaja andmete päring Github-st - statusCode: ', response.statusCode);
-      }
-      var saadudAndmed = JSON.parse(body);
-      console.log('kasutaja: ', saadudAndmed.login);
-      res.status(200)
-        .render('pages/autenditud', { kasutaja: saadudAndmed.login });
-    });
-});
-
-app.post('/salvesta', (req, res) => {
-  console.log(req.body);
-  var fNimi = req.body.failinimi;
-  var sTekst = req.body.salvestatavtekst;
-  const access_token = accessTokenFromCookies(req);
-  /* Salvestame teksti Githubi. Vt https://developer.github.com/v3/repos/contents/#create-a-file 
-  PUT /repos/:owner/:repo/contents/:path
-  */
-
-  var buffer = new Buffer(sTekst);
-  var toBase64 = buffer.toString('base64');
-
-  var sisu = {
-      message: 'Testimine',
-      committer: { 
-        name: "Priit Parmakson",
-        email: "priit.parmakson@gmail.com"
-      },
-      content: toBase64
-    };
-
-  const GithubAPIURL = 'https://api.github.com/';
-  var options = {
-    method: 'PUT',
-    url: GithubAPIURL + 'repos/PriitParmakson/Samategev/contents/' + fNimi,
-    headers: {
-      'User-Agent': 'Samategev',
-      'Authorization': 'token ' + access_token
-    },
-    json: true,
-    body: sisu
-  };
-  requestModule(
-    options,
-    function (error, response, body) {
-      var vastus;
-      if (error) {
-        vastus = 'Viga faili salvestamisel Github-i: ' + error;
-        console.log('Viga faili salvestamisel Github-i: ', error);
-      }
-      if (response) {
-        console.log('Faili salvestamine Github-i - statusCode: ', response.statusCode);
-        if (response.statusCode == 201) {
-          vastus = 'Salvestatud';
-        }
-        else {
-          vastus = 'Salvestamine ebaõnnestus. Kood: ' + response.statusCode;
-        }
-      }
-      res.status(200)
-        .render('pages/salvestatud', { vastus: vastus });
-    });
-})
-
-// Selgitada, mida see teeb
-app.get('/success', (req, res) => {
-  res.send('');
-});
-
-/* 4 Käimatõmbamine
-   -------------------------------------------
-*/
 
 // Veebiserveri käivitamine
 app.listen(app.get('port'), function () {
