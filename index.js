@@ -64,8 +64,7 @@ app.get('/Callback', (req, res) => {
     form: {
       'grant_type': 'authorization_code',
       'code': code,
-      'redirect_uri': 'https://samategev.herokuapp.com/Callback',
-      'client_id': 'ParmaksonResearch'
+      'redirect_uri': 'https://samategev.herokuapp.com/Callback'
     }
   };
   requestModule(
