@@ -25,7 +25,12 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+// const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+// Ei saanud keskkonnamuutujana CLIENT_SECRET väärtust kätte
+const CLIENT_SECRET = 'secret';
+const CLIENT_ID = 'openIdDemo';
+const B64_VALUE = new Buffer(CLIENT_ID + ":" + CLIENT_SECRET).toString('base64');
 
 // Esilehe kuvamine
 app.get('/', function (req, res) {
@@ -56,10 +61,10 @@ app.get('/Callback', (req, res) => {
  
   // request mooduli kasutamisega
   var options = {
-    url: 'https://tara-test.ria.ee/oidc/accessToken',
+    url: 'https://tara-test.ria.ee/oidc/token',
     method: 'POST',
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',      'Authorization': 'Basic ' + CLIENT_SECRET
+      'Content-Type': 'application/x-www-form-urlencoded',      'Authorization': 'Basic ' + B64_VALUE
     },
     form: {
       'grant_type': 'authorization_code',
